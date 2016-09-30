@@ -7,18 +7,18 @@ import android.support.v4.app.FragmentTransaction;
 /**
  * Created by atv684 on 9/21/16.
  */
-public class MainActivity extends BaseActivity {
+public class AddQuoteActivity extends BaseActivity {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        MainFragment mainFragment = new MainFragment();
+        AddQuoteFragment fragment = new AddQuoteFragment();
 
-        transaction.add(R.id.content, mainFragment);
+        transaction.add(R.id.content, fragment);
         transaction.commit();
     }
 }

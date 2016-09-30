@@ -8,10 +8,10 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
-        tools:context="com.example.atv684.positivityreminders.MainActivity">
+        tools:context=".BaseActivity">
 
-    <TextView
-            android:text="Hello World!"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+    <fragment android:name="com.example.atv684.positivityreminders.MainFragment"
+              android:id="@+id/fragment"
+              android:layout_height="match_parent"
+              android:layout_width="match_parent"/>
 </RelativeLayout>

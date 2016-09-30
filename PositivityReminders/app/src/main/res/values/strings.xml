@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PositivityReminders</string>
+    <string name="add_quote">Add Quote</string>
+    <string name="snackbar_quote_has_been_added">Quote has been added!</string>
 </resources>

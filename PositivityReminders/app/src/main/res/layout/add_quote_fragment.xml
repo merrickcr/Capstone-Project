@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+
+    <android.support.design.widget.TextInputLayout
+            android:id="@+id/authorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp">
+
+        <EditText
+                android:id="@+id/author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Author"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+            android:layout_below="@id/authorLayout"
+            android:id="@+id/textLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp">
+
+        <EditText
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:lines="10"
+                android:hint="Text"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+            android:layout_margin="10dp"
+            android:background="@color/colorPrimary"
+            android:layout_below="@+id/textLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_quote"
+            android:textColor="@android:color/white"
+            android:id="@+id/add_quote_button"/>
+
+</RelativeLayout>
