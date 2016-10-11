@@ -1,6 +1,7 @@
 package com.example.atv684.positivityreminders;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,26 +11,34 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class StackAdapter extends BaseAdapter {
+public class StackAdapter extends RecyclerView.Adapter<StackAdapter.ViewHolder> {
 
     ArrayList<QuoteObject> arrayList;
     LayoutInflater inflater;
-    ViewHolder holder = null;
 
     public StackAdapter(Context context, ArrayList arrayList) {
         this.arrayList = arrayList;
         this.inflater = LayoutInflater.from(context);
     }
 
+
     @Override
-    public int getCount() {
-        return arrayList.size();
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+            .inflate(R.layout.stack_view_item_layout, parent, false);
+
+        return new ViewHolder(v);
     }
 
     @Override
-    public QuoteObject getItem(int pos) {
-        return arrayList.get(pos);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+
+        QuoteObject object = arrayList.get(position);
+
+        holder.author.setText("-"+object.getAuthor());
+        holder.text.setText(object.getText());
     }
+
 
     @Override
     public long getItemId(int pos) {
@@ -37,25 +46,29 @@ public class StackAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int pos, View view, ViewGroup parent) {
-        if (view == null) {
-            view = inflater.inflate(R.layout.stack_view_item_layout, parent, false);
-            holder = new ViewHolder();
-            holder.image = (ImageView) view.findViewById(R.id.image);
-            holder.text = (TextView)view.findViewById(R.id.text);
-            view.setTag(holder);
-        } else {
-            holder = (ViewHolder) view.getTag();
-        }
-        holder.text.setText((arrayList.get(pos).getText()));
-
-        return view;
+    public int getItemCount() {
+        return arrayList.size();
     }
 
-    public class ViewHolder {
+    public void setItems(ArrayList items) {
+        this.arrayList = items;
+    }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView image;
         TextView text;
         TextView author;
+
+        public ViewHolder(View view) {
+            super(view);
+
+            image = (ImageView) view.findViewById(R.id.image);
+            text = (TextView) view.findViewById(R.id.text);
+            author = (TextView) view.findViewById(R.id.author);
+
+
+        }
     }
 
 }

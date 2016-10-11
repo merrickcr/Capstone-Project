@@ -1,8 +1,12 @@
 package com.example.atv684.positivityreminders;
 
 import android.database.Cursor;
+import android.util.Log;
 
 import com.example.atv684.positivityreminders.provider.QuotesContract;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by atv684 on 9/16/16.
@@ -31,6 +35,21 @@ public class QuoteObject {
         isCustom = (c.getInt(c.getColumnIndex(QuotesContract.QuoteEntry.COLUMN_CUSTOM)) > 0) ? true : false;
         isFavorite = (c.getInt(c.getColumnIndex(QuotesContract.QuoteEntry.COLUMN_FAVORITE)) > 0) ? true : false;
         id = c.getInt(c.getColumnIndex(QuotesContract.QuoteEntry._ID));
+    }
+
+    public QuoteObject(String jsonString){
+
+
+        try {
+            JSONObject json = new JSONObject(jsonString);
+
+            this.text = json.optString("quoteText");
+            this.author = json.optString("quoteAuthor");
+
+        }
+        catch(JSONException e){
+            Log.e("QUOTE", e.getMessage());
+        }
 
 
     }

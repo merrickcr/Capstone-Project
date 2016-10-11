@@ -2,14 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.atv684.positivityreminders">
 
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+
         <activity android:name=".BaseActivity">
         </activity>
+
+        <activity android:name=".Schedules.AddScheduleActivity"/>
 
         <activity android:name=".AddQuoteActivity" />
 
@@ -20,6 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".Schedules.ViewScheduleActivity"/>
 
     </application>
 

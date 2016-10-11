@@ -1,19 +1,20 @@
 package com.example.atv684.positivityreminders;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.atv684.positivityreminders.Menu.MenuListAdapter;
 import com.example.atv684.positivityreminders.Menu.SideNavMenuItem;
+import com.example.atv684.positivityreminders.Schedules.AddScheduleActivity;
+import com.example.atv684.positivityreminders.Schedules.ViewScheduleActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -38,13 +39,18 @@ public class BaseActivity extends AppCompatActivity {
 
         setupMenuOptions();
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
+
     }
 
     private void handleMenuClick(int position) {
         //TODO
 
         if(position == 0){
-            Intent intent = new Intent(this, AddQuoteActivity.class);
+            Intent intent = new Intent(this, ViewScheduleActivity.class);
             startActivity(intent);
         }
     }
