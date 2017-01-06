@@ -64,14 +64,16 @@ public class ScheduleUtil {
         HashSet<String> schedules = (HashSet) PreferenceManager.getDefaultSharedPreferences(context).getStringSet(ScheduleUtil.SCHEDULE_PREFERENCE, new
             HashSet<String>());
 
+        HashSet<String> newScheduleList = (HashSet)schedules.clone();
+
         for (String string : schedules) {
             ScheduleObject scheduleObject = new ScheduleObject(string);
             if (scheduleObject.id == object.id) {
-                schedules.remove(string);
+                newScheduleList.remove(string);
             }
         }
 
-        editor.putStringSet(ScheduleUtil.SCHEDULE_PREFERENCE, schedules).commit();
+        editor.putStringSet(ScheduleUtil.SCHEDULE_PREFERENCE, newScheduleList).commit();
 
         Log.e("deleted", "deleted schedule");
     }

@@ -8,4 +8,5 @@
     <string name="start_time_colon">"Start Time: "</string>
     <string name="schedules_colon">Schedules:</string>
     <string name="schedules">Schedules</string>
+    <string name="notification_title">Your positive reminder!</string>
 </resources>

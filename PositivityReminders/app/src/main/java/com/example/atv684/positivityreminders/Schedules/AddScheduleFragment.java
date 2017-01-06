@@ -1,8 +1,14 @@
 package com.example.atv684.positivityreminders.Schedules;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +23,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.atv684.positivityreminders.MainActivity;
+import com.example.atv684.positivityreminders.NotificationBroadcastReceiver;
 import com.example.atv684.positivityreminders.R;
 
 import java.util.Calendar;
@@ -164,5 +172,10 @@ public class AddScheduleFragment extends Fragment {
 
         Snackbar.make(getView(), "Added a schedule!", Snackbar.LENGTH_LONG).show();
 
+        NotificationScheduler scheduler = new NotificationScheduler(getContext());
+        scheduler.scheduleNotification();
+
     }
+
+
 }

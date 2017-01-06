@@ -14,6 +14,8 @@
         <activity android:name=".BaseActivity">
         </activity>
 
+        <receiver android:name=".NotificationBroadcastReceiver"/>
+
         <activity android:name=".Schedules.AddScheduleActivity"/>
 
         <activity android:name=".AddQuoteActivity" />
@@ -27,6 +29,8 @@
         </activity>
 
         <activity android:name=".Schedules.ViewScheduleActivity"/>
+
+        <provider android:authorities="positivereminders.provider.quotes" android:name=".provider.QuoteProvider" />
 
     </application>
 

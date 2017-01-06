@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -31,6 +33,8 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements Callback {
 
     final static int DATABASE_VERSION = 2;
 
+    private final Context context;
+
     private int requestCount = 0;
 
     private static final int REQUEST_COUNT_MAX = 3;
@@ -44,6 +48,7 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements Callback {
     public QuoteDBHelper(Context context, DBHelperCallbackListener listener) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
+        this.context = context;
         this.listener = listener;
     }
 
@@ -100,8 +105,7 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements Callback {
 
         try {
             db.insert(QuotesContract.QuoteEntry.TABLE_NAME, null, values);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -133,6 +137,13 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements Callback {
 
     }
 
+    public int updateQuote(ContentValues values, String selection, String[] selectionArgs) {
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        return db.update(QuotesContract.QuoteEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
+
     public QuoteObject readQuote() {
         QuoteObject object = null;
 
@@ -155,6 +166,19 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements Callback {
         return object;
 
     }
+
+    public Cursor fetchQuotesCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder){
+        SQLiteDatabase db = getReadableDatabase();
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+
+        builder.setTables(QuotesContract.QuoteEntry.TABLE_NAME);
+
+        Cursor c = builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+
+        return c;
+    }
+
 
     public void fetchQuotesFromOnline() {
 
@@ -199,28 +223,71 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements Callback {
         final Call finalCall = call;
         final Response finalResponse = response;
 
-        handler.post(new Runnable(){
+        QuoteObject quote = new QuoteObject(finalResponse.body().string());
+
+        //String urlImage = getImageForQuote();
+
+        addQuote(quote);
+
+        synchronized (requestQueue) {
+            requestQueue.remove(finalCall.request());
+        }
+
+        handler.post(new Runnable() {
 
             @Override
             public void run() {
-                try {
-                    QuoteObject quote = new QuoteObject(finalResponse.body().string());
-
-                    addQuote(quote);
-
-                    synchronized (requestQueue) {
-                        requestQueue.remove(finalCall.request());
-                    }
-
-                    if (listener != null && requestQueue.isEmpty()) {
-                        listener.onLoadOnlineQuotes();
-                    }
-                }
-                catch(IOException e){
-                    Log.e("TAG", e.getMessage());
+                if (listener != null && requestQueue.isEmpty()) {
+                    listener.onLoadOnlineQuotes();
                 }
             }
         });
+    }
+
+    private String getImageForQuote() {
+        //https://source.unsplash.com/category/nature/800x600
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+            .url("https://source.unsplash.com/category/nature/800x600")
+            .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+
+            Log.e("TAG", response.body().toString());
+        } catch (IOException e) {
+            return null;
+        }
+
+        return null;
+    }
+
+    public long insertQuote(ContentValues values) {
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        return db.insert(QuotesContract.QuoteEntry.TABLE_NAME, null, values);
+    }
+
+    public int deleteQuote(String selection, String[] selectionArgs){
+
+        db = getWritableDatabase();
+
+        return db.delete(QuotesContract.QuoteEntry.TABLE_NAME, selection, selectionArgs);
+
+    }
+
+    public Cursor fetchFavoriteQuotes(){
+
+        Cursor c = context.getContentResolver().query(QuoteProvider.CONTENT_URI, null, QuotesContract.QuoteEntry
+            .COLUMN_FAVORITE + " = ?", new String[] {"1"}, null);
+
+        return c;
+    }
+
+    public Cursor fetchQuotesFromDB() {
+        return context.getContentResolver().query(QuoteProvider.CONTENT_URI, null, null, null, null);
     }
 
     public interface DBHelperCallbackListener {
@@ -228,4 +295,6 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements Callback {
         //calls when quotes have been read online and added into the data base
         void onLoadOnlineQuotes();
     }
+
+
 }

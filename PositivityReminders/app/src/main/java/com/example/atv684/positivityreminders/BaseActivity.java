@@ -49,10 +49,18 @@ public class BaseActivity extends AppCompatActivity {
     private void handleMenuClick(int position) {
         //TODO
 
+        Intent intent = null;
         if(position == 0){
-            Intent intent = new Intent(this, ViewScheduleActivity.class);
-            startActivity(intent);
+           intent = new Intent(this, ViewScheduleActivity.class);
+
         }
+        else if(position == 1){
+            intent = new Intent(this, MyQuotesActivity.class);
+        }
+
+        if(intent == null) return;
+
+        startActivity(intent);
     }
 
 

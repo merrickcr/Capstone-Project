@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 public class StackAdapter extends RecyclerView.Adapter<StackAdapter.ViewHolder> {
@@ -16,9 +18,12 @@ public class StackAdapter extends RecyclerView.Adapter<StackAdapter.ViewHolder> 
     ArrayList<QuoteObject> arrayList;
     LayoutInflater inflater;
 
+    Context context;
+
     public StackAdapter(Context context, ArrayList arrayList) {
         this.arrayList = arrayList;
         this.inflater = LayoutInflater.from(context);
+        this.context = context;
     }
 
 
@@ -37,6 +42,8 @@ public class StackAdapter extends RecyclerView.Adapter<StackAdapter.ViewHolder> 
 
         holder.author.setText("-"+object.getAuthor());
         holder.text.setText(object.getText());
+
+        Picasso.with(context).load("https://source.unsplash.com/category/nature/800x600").into(holder.image);
     }
 
 
@@ -66,8 +73,6 @@ public class StackAdapter extends RecyclerView.Adapter<StackAdapter.ViewHolder> 
             image = (ImageView) view.findViewById(R.id.image);
             text = (TextView) view.findViewById(R.id.text);
             author = (TextView) view.findViewById(R.id.author);
-
-
         }
     }
 
