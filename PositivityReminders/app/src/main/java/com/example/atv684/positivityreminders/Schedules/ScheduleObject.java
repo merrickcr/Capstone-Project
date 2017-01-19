@@ -1,11 +1,21 @@
 package com.example.atv684.positivityreminders.Schedules;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.preference.PreferenceManager;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.util.Log;
 
+import com.example.atv684.positivityreminders.provider.QuotesContract;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Random;
 
 /**
@@ -13,45 +23,70 @@ import java.util.Random;
  */
 public class ScheduleObject {
 
-
     Date startTime;
-    Date endTime;
 
-    int frequency;
+    ArrayList<String> days;
 
-    int id;
+    long id;
 
-    ScheduleObject(){
-        id = new Random().nextInt();
+    public ScheduleObject(){
+
     }
 
-    ScheduleObject(String json){
+    ScheduleObject(String json) {
         try {
             JSONObject jsonObject = new JSONObject(json);
 
             startTime = new Date(jsonObject.getString("startTime"));
-            endTime = new Date(jsonObject.getString("endTime"));
             id = jsonObject.optInt("id");
-            frequency = jsonObject.optInt("frequency");
 
-        }
-        catch (JSONException e){
+            JSONArray daysArray = jsonObject.getJSONArray("days");
+
+            for(int i = 0; i < daysArray.length(); i++){
+                addDay(daysArray.getString(i));
+            }
+
+        } catch (JSONException e) {
             Log.e("SCHEDULE OBJECT", e.getMessage());
         }
 
     }
 
-    public String toJson(){
+    public ScheduleObject(Cursor c) {
+
+        if(c.getCount() <= 0){
+            return;
+        }
+
+        startTime = new Date(c.getString(c.getColumnIndex(QuotesContract.ScheduleEntry.COLUMN_TIME)));
+
+        try {
+            setDays(new JSONArray(c.getString(c.getColumnIndex(QuotesContract.ScheduleEntry.COLUMN_DAYS))));
+        }catch(JSONException e){
+            Log.e("qbhelper", e.getMessage());
+        }
+
+    }
+
+    public String toJson() {
 
         JSONObject object = new JSONObject();
 
         try {
-            object.put("startTime", startTime.toString());
-            object.put("endTime", endTime.toString());
-            object.put("frequency", frequency);
-            object.put("id", id);
-        }
-        catch (JSONException e){
+            if (startTime != null) {
+                object.put("startTime", startTime.toString());
+                object.put("id", id);
+
+                JSONArray daysArray = new JSONArray();
+
+                for(String s : days){
+                    daysArray.put(s);
+                }
+
+                object.put("days", daysArray);
+            }
+
+        } catch (JSONException e) {
             return null;
         }
 
@@ -67,19 +102,50 @@ public class ScheduleObject {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
-        return endTime;
+    public void addDay(String day) {
+
+        if(days == null){
+            days = new ArrayList<String>();
+        }
+        if(!days.contains(day)){
+            days.add(day);
+        }
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void removeDay(String day) {
+        days.remove(day);
     }
 
-    public int getFrequency() {
-        return frequency;
+    public JSONArray getDaysJSONArray(){
+        JSONArray daysArray = new JSONArray();
+
+        for(String s : days){
+            daysArray.put(s);
+        }
+
+        return daysArray;
     }
 
-    public void setFrequency(int frequency) {
-        this.frequency = frequency;
+    public void setDays(JSONArray array){
+
+        days = new ArrayList<String>();
+
+        for(int i= 0;i < array.length(); i++){
+            days.add(array.optString(i));
+        }
+
+    }
+
+    public void setDays(ArrayList<String> days){
+        this.days = days;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
+

@@ -1,12 +1,25 @@
 <resources>
-    <string name="app_name">PositivityReminders</string>
+    <string name="app_name">QuoteMe</string>
     <string name="add_quote">Add Quote</string>
     <string name="snackbar_quote_has_been_added">Quote has been added!</string>
     <string name="end_time_colon">"End Time: "</string>
     <string name="select_end_time">Select End Time</string>
-    <string name="select_start_time">Select Start Time</string>
-    <string name="start_time_colon">"Start Time: "</string>
+    <string name="select_start_time">Select Reminder Time</string>
+    <string name="start_time_colon">"Time: "</string>
     <string name="schedules_colon">Schedules:</string>
     <string name="schedules">Schedules</string>
     <string name="notification_title">Your positive reminder!</string>
+    <string name="schedules_li">Schedules</string>
+    <string name="favorites_li">Favorites</string>
+    <string name="my_quotes_li">My Quotes</string>
+    <string name="home_li">Home</string>
+    <string name="add_quote_li">Add Quote</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="cd_add_quote">Add Quote</string>
+    <string name="label_view_schedules">View Schedules</string>
+    <string name="label_add_a_reminder">add a Reminder</string>
+    <string name="cd_button">" button"</string>
+    <string name="cd_delete">delete</string>
+    <string name="add_a_reminder">Add a Reminder</string>
+    <string name="add_reminder">Add Reminder</string>
 </resources>

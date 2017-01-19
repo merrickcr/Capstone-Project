@@ -12,13 +12,13 @@
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:layout_centerHorizontal="true"
                   android:id="@+id/title"
-                  android:text="Add a schedule"
+                  android:text="@string/add_a_reminder"
                   android:paddingTop="15dp"
                   android:textColor="@android:color/black"
                   android:textSize="@dimen/title_text_size"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:text="Start Time:"
+                  android:text="Time:"
                   android:id="@+id/start_time_textview"
                   android:layout_below="@+id/title"
                   android:layout_marginTop="15dp"
@@ -32,47 +32,17 @@
                 android:id="@+id/start_time_button"
         />
 
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:text="End Time:"
-                  android:id="@+id/end_time_textview"
-                  android:layout_below="@+id/start_time_button"
-                  android:layout_marginTop="15dp"
-        />
 
-        <Button android:layout_marginTop="15dp"
-                style="@style/primary_button"
-                android:layout_below="@+id/end_time_textview"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:text="End Time: "
-                android:id="@+id/end_time_button"
-        />
 
-        <TextView
-                android:layout_marginTop="25dp"
-                android:id="@+id/frequency_textview"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="Frequency: "
-                android:layout_below="@id/end_time_button"/>
-
-        <TextView
-                android:layout_centerHorizontal="true"
-                android:layout_alignBottom="@id/frequency_textview"
-                android:id="@+id/frequency_value_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        <SeekBar
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_below="@+id/frequency_textview"
-                android:id="@+id/frequency_seekbar"/>
 
         <Button
-                android:text="Add Schedule"
+                android:text="@string/add_reminder"
                 android:layout_marginTop="15dp"
-                android:layout_below="@+id/frequency_seekbar"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="20dp"
                 android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:id="@+id/add_schedule_button"
+                android:layout_below="@+id/start_time_button"
                 style="@style/primary_button"/>
 
     </RelativeLayout>

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.atv684.positivityreminders.R;
+import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,7 +36,10 @@ public class ViewSchedulesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((ScheduleListAdapter)listView.getAdapter()).notifyDataSetChanged();
+        ArrayList<ScheduleObject> schedules = new ArrayList<>();
+
+        schedules = new QuoteDBHelper(getContext(), null).getSchedules();
+        listView.setAdapter(new ScheduleListAdapter(getContext(), schedules));
     }
 
     @Override
@@ -54,10 +58,7 @@ public class ViewSchedulesFragment extends Fragment {
             }
         });
 
-        ArrayList<ScheduleObject> schedules = new ArrayList<>();
 
-        schedules = ScheduleUtil.getSchedules(getContext());
-        listView.setAdapter(new ScheduleListAdapter(getContext(), schedules));
 
     }
 

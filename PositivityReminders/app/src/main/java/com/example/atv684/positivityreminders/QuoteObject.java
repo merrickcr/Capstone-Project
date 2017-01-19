@@ -29,6 +29,8 @@ public class QuoteObject {
 
     public QuoteObject(Cursor c){
 
+        if(c.getCount() <= 0 ) return;
+
         text = c.getString(c.getColumnIndex(QuotesContract.QuoteEntry.COLUMN_TEXT));
         author = c.getString(c.getColumnIndex(QuotesContract.QuoteEntry.COLUMN_AUTHOR));
         numViews = c.getInt(c.getColumnIndex(QuotesContract.QuoteEntry.COLUMN_NUM_VIEWS));

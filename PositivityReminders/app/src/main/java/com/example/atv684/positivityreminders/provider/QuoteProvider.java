@@ -10,6 +10,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import com.example.atv684.positivityreminders.QuoteObject;
+
+import java.util.ArrayList;
+
 /**
  * Created by atv684 on 9/19/16.
  */
@@ -107,5 +111,10 @@ public class QuoteProvider extends ContentProvider implements QuoteDBHelper.DBHe
     @Override
     public void onLoadOnlineQuotes() {
         //not needed, ignore
+    }
+
+    @Override
+    public void onDataFinished(ArrayList<QuoteObject> quotes) {
+        //not needed
     }
 }

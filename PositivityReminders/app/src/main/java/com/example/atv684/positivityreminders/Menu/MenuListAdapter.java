@@ -1,6 +1,7 @@
 package com.example.atv684.positivityreminders.Menu;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,9 +50,11 @@ public class MenuListAdapter extends BaseAdapter {
             if(currentObject instanceof SideNavMenuItem) {
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_list_item, parent, false);
 
-                ((ImageView)view.findViewById(R.id.icon)).setImageDrawable(context.getResources().getDrawable(((SideNavMenuItem)
-                    currentObject).getIcon(), null));
+
+                ((ImageView)view.findViewById(R.id.icon)).setImageDrawable(ContextCompat.getDrawable(context, ((SideNavMenuItem) currentObject).getIcon()));
                 ((TextView)view.findViewById(R.id.menu_text)).setText(((SideNavMenuItem) currentObject).getText());
+
+                view.setContentDescription(((SideNavMenuItem) currentObject).getText() + context.getString(R.string.cd_button));
             }
 
         }

@@ -19,6 +19,7 @@
             android:id="@+id/add_schedule_fab"
             app:fabSize="normal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/cd_add_quote"/>
 
 </RelativeLayout>

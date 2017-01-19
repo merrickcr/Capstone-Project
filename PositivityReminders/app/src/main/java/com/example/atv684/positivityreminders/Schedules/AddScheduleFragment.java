@@ -26,6 +26,8 @@ import android.widget.TimePicker;
 import com.example.atv684.positivityreminders.MainActivity;
 import com.example.atv684.positivityreminders.NotificationBroadcastReceiver;
 import com.example.atv684.positivityreminders.R;
+import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
+import com.example.atv684.positivityreminders.provider.QuotesContract;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -38,17 +40,8 @@ public class AddScheduleFragment extends Fragment {
 
     private Button startTimeButton;
 
-    private Button endTimeButton;
-
-    private Date endTime;
-
     private Date startTime;
 
-    private SeekBar frequencySeekBar;
-
-    private int frequencyValue;
-
-    private TextView frequencyValueTextView;
 
     private Button addScheduleButton;
 
@@ -62,14 +55,8 @@ public class AddScheduleFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        Log.e("TAG", sharedPrefs.getStringSet(ScheduleUtil.SCHEDULE_PREFERENCE, new HashSet<String>()).toString());
-
         startTimeButton = (Button) view.findViewById(R.id.start_time_button);
-        endTimeButton = (Button) view.findViewById(R.id.end_time_button);
-        frequencySeekBar = (SeekBar) view.findViewById(R.id.frequency_seekbar);
-        frequencyValueTextView = (TextView) view.findViewById(R.id.frequency_value_textview);
+
         addScheduleButton = (Button) view.findViewById(R.id.add_schedule_button);
 
         startTimeButton.setOnClickListener(new View.OnClickListener() {
@@ -96,50 +83,6 @@ public class AddScheduleFragment extends Fragment {
             }
         });
 
-        endTimeButton = (Button) view.findViewById(R.id.end_time_button);
-
-        endTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Calendar mcurrentTime = Calendar.getInstance();
-                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = mcurrentTime.get(Calendar.MINUTE);
-                TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        endTimeButton.setText(getResources().getString(R.string.end_time_colon) +  selectedHour + ":" + selectedMinute);
-                        endTime = new Date();
-                        endTime.setHours(selectedHour);
-                        endTime.setMinutes(selectedMinute);
-                    }
-                }, hour, minute, false);//Yes 24 hour time
-                mTimePicker.setTitle(getResources().getString(R.string.select_end_time));
-                mTimePicker.show();
-
-            }
-        });
-
-        frequencySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                frequencyValue = progress;
-
-                handleFrequencyValueText();
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
 
         addScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,31 +92,20 @@ public class AddScheduleFragment extends Fragment {
         });
     }
 
-    private void handleFrequencyValueText() {
-        if(frequencyValue < 33){
-            frequencyValueTextView.setText("Low");
-        }
-        else if(frequencyValue < 66){
-            frequencyValueTextView.setText("Medium");
-        }
-        else{
-            frequencyValueTextView.setText("High");
-        }
-    }
-
     private void addNewSchedule(){
 
         ScheduleObject schedule = new ScheduleObject();
         schedule.setStartTime(startTime);
-        schedule.setEndTime(endTime);
-        schedule.setFrequency(frequencyValue);
+        schedule.setDays(QuotesContract.ScheduleEntry.FULL_WEEK);
 
-        ScheduleUtil.addSchedule(getContext(), schedule);
+        long id = new QuoteDBHelper(getContext(), null).addSchedule(schedule);
+
+        schedule.setId(id);
 
         Snackbar.make(getView(), "Added a schedule!", Snackbar.LENGTH_LONG).show();
 
         NotificationScheduler scheduler = new NotificationScheduler(getContext());
-        scheduler.scheduleNotification();
+        scheduler.scheduleNotification(schedule);
 
     }
 

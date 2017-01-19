@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
+import java.util.ArrayList;
+
 public class AddQuoteFragment extends Fragment implements QuoteDBHelper.DBHelperCallbackListener {
 
     Button addQuoteButton;
@@ -55,6 +57,11 @@ public class AddQuoteFragment extends Fragment implements QuoteDBHelper.DBHelper
 
     @Override
     public void onLoadOnlineQuotes() {
+        //not needed
+    }
+
+    @Override
+    public void onDataFinished(ArrayList<QuoteObject> quotes) {
         //not needed
     }
 }

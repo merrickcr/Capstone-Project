@@ -44,6 +44,7 @@
             android:layout_height="wrap_content"
             android:text="@string/add_quote"
             android:textColor="@android:color/white"
+            android:contentDescription="@string/cd_add_quote"
             android:id="@+id/add_quote_button"/>
 
 </RelativeLayout>

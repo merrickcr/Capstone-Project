@@ -9,13 +9,12 @@ import android.os.SystemClock;
 
 import com.example.atv684.positivityreminders.NotificationBroadcastReceiver;
 import com.example.atv684.positivityreminders.R;
+import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
-/**
- * Created by atv684 on 10/12/16.
- */
 public class NotificationScheduler {
 
     Context context;
@@ -32,22 +31,22 @@ public class NotificationScheduler {
         return builder.build();
     }
 
-    public void scheduleNotification(){
+    public void scheduleNotification(ScheduleObject scheduleObject){
 
         Intent notificationIntent = new Intent(context, NotificationBroadcastReceiver.class);
-//        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
-//        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ((int)scheduleObject.id), notificationIntent,
+            PendingIntent
+            .FLAG_UPDATE_CURRENT);
 
-        long diff = getNextSchedule().getStartTime().getTime() - new Date().getTime();
-        long futureInMillis = diff;
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC, scheduleObject.getStartTime().getTime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES ,
+            pendingIntent);
+
     }
 
     public ScheduleObject getNextSchedule(){
 
-        ArrayList<ScheduleObject> schedules = ScheduleUtil.getSchedules(context);
+        ArrayList<ScheduleObject> schedules = new QuoteDBHelper(context, null).getSchedules();
 
         Date startTime = null;
         Date endTime;
@@ -55,24 +54,31 @@ public class NotificationScheduler {
         ScheduleObject returnSchedule = null;
 
         Date now = new Date();
+        long diff = 0;
+        long currentDif = Long.MAX_VALUE;
 
         for(ScheduleObject schedule : schedules){
-
-            long diff = schedule.getStartTime().getTime() - now.getTime();
-            long startDiff = -1;
-
-            if(startTime != null){
-                startDiff = startTime.getTime() - now.getTime();
+            if(schedule.startTime != null){
+                diff = schedule.startTime.getTime() - now.getTime();
             }
-            if(startTime == null || diff < startDiff && diff > 0){
+            if(startTime == null || diff < currentDif && diff > 0){
                 startTime = schedule.getStartTime();
-                endTime = schedule.getEndTime();
                 returnSchedule = schedule;
+                currentDif = diff;
             }
 
         }
-
         return returnSchedule;
+    }
+
+    public int compareTimes(Date d1, Date d2)
+    {
+        int     t1;
+        int     t2;
+
+        t1 = (int) (d1.getTime() % (24*60*60*1000L));
+        t2 = (int) (d2.getTime() % (24*60*60*1000L));
+        return (t1 - t2);
     }
 
 }

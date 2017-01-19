@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.atv684.positivityreminders.Schedules.NotificationScheduler;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
 
@@ -44,6 +45,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
         mBuilder.setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(1, mBuilder.build());
+
     }
 
 }

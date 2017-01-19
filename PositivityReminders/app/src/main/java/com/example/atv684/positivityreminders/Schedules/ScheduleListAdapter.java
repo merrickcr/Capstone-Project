@@ -16,9 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-/**
- * Created by atv684 on 10/7/16.
- */
 public class ScheduleListAdapter extends BaseAdapter {
 
     ArrayList<ScheduleObject> arrayList;
@@ -58,16 +55,13 @@ public class ScheduleListAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.view_schedule_item, parent, false);
             holder = new ViewHolder();
             holder.startTime = (TextView) view.findViewById(R.id.start_time_textview);
-            holder.frequency = (TextView) view.findViewById(R.id.frequency_textview);
             holder.deleteButton = (ImageButton) view.findViewById(R.id.delete_button);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.startTime.setText(ScheduleUtil.dateFormat.format(getItem(pos).getStartTime()) + " to " + ScheduleUtil.dateFormat.format
-            (getItem(pos).getEndTime()));
-        holder.frequency.setText(ScheduleUtil.getFrequencyLabel(getItem(pos).getFrequency()));
+        holder.startTime.setText(ScheduleUtil.dateFormat.format(getItem(pos).getStartTime()));
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/start_time_label"
-            android:text="From: "/>
+            android:text="Time: "/>
     <TextView
             style="@style/basic_text_style"
             android:paddingTop="5dp"
@@ -22,23 +22,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/start_time_textview"/>
 
-    <TextView
-            android:paddingTop="5dp"
-            style="@style/basic_text_style"
-            android:layout_below="@id/start_time_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/frequency_label"
-            android:text="Frequency: "/>
-    <TextView
-            style="@style/basic_text_style"
-            android:paddingTop="5dp"
-            android:layout_below="@+id/start_time_textview"
-            android:layout_toRightOf="@id/frequency_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="5dp"
-            android:id="@+id/frequency_textview"/>
 
     <ImageButton android:layout_width="50dp"
                  android:layout_height="match_parent"
@@ -48,6 +31,7 @@
                  android:id="@+id/delete_button"
                  android:backgroundTint="@color/colorAccent"
                  android:src="@drawable/ic_delete_forever_white_24dp"
+                 android:contentDescription="@string/cd_delete"
                  android:gravity="right"/>
 
 
