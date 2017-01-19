@@ -6,19 +6,24 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -75,6 +80,9 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
 
         dbHelper = new QuoteDBHelper(getContext(), this);
 
+
+
+
         String trackingTag = Constants.HOME_TAG;
 
         if (adapter.getItemCount() <= 0) {
@@ -103,10 +111,11 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
 
         dbHelper.fetchQuotesFromOnline();
 
-//        //fetch quotes on initial setup
-//        if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
+        //fetch quotes on initial setup
+        if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
 //            dbHelper.fetchQuotesFromOnline();
-//        }
+//            dbHelper.fetchImagesFromOnline();
+        }
 
     }
 
@@ -148,7 +157,7 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
     public void onLoadOnlineQuotes() {
 
         if (adapter.getItemCount() <= 0) {
-            dbHelper.fetchQuotesFromDB();
+            //dbHelper.fetchQuotesFromDB();
         }
     }
 

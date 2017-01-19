@@ -22,6 +22,7 @@ import android.util.Log;
 import com.example.atv684.positivityreminders.BaseActivity;
 import com.example.atv684.positivityreminders.QuoteObject;
 import com.example.atv684.positivityreminders.Schedules.ScheduleObject;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -44,9 +45,15 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     final static int DATABASE_VERSION = 3;
 
+    private static final int IMAGE_REQUEST_MAX = 25;
+
+    private static final Object LOCK_OBJECT = new Object();
+
     private final Context context;
 
     private int requestCount = 0;
+
+    private int imageRequestCount = 0;
 
     private static final int REQUEST_COUNT_MAX = 100;
 
@@ -138,7 +145,9 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
         Cursor c = db.query(TABLE_NAME, null, null, null, null, null, null);
 
-        c.move(new Random().nextInt(c.getCount()));
+        if(!c.move(new Random().nextInt(c.getCount()))){
+            return null;
+        }
 
         byte[] blob = c.getBlob(c.getColumnIndex(IMAGE_KEY_IMAGE));
 
@@ -413,6 +422,23 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    public void fetchImagesFromOnline() {
+
+        synchronized (LOCK_OBJECT) {
+            for (imageRequestCount = 0; imageRequestCount < IMAGE_REQUEST_MAX; imageRequestCount++) {
+                new Thread(new Runnable() {
+                    public void run() {
+                        try {
+                            addImage(Picasso.with(context).load("https://source.unsplash.com/category/nature/800x600").get());
+                        } catch (IOException e) {
+                            Log.e("MAINFRAGMENT", e.getMessage());
+                        }
+                    }
+                }).start();
+            }
+        }
     }
 
     public interface DBHelperCallbackListener {

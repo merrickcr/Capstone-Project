@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -46,10 +47,30 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    @Override
-    public void onViewAttachedToWindow(ViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
-        Picasso.with(context).load("https://source.unsplash.com/category/nature/800x600").into(holder.image);
+    private void loadImageFromDatabase(final ViewHolder holder) {
+
+        AsyncTask<String, Integer, Bitmap> task = new AsyncTask<String, Integer, Bitmap>() {
+
+            @Override
+            protected Bitmap doInBackground(String... strings) {
+                Bitmap bitmap = new QuoteDBHelper(context, null).getImage();
+
+                if(bitmap != null){
+                    return bitmap;
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                super.onPostExecute(bitmap);
+
+                holder.image.setImageBitmap(bitmap);
+            }
+        };
+
+        task.execute("test");
     }
 
     @Override
@@ -109,6 +130,8 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
             }
         });
+
+        loadImageFromDatabase(holder);
     }
 
     public void setupFabColor(QuoteObject object, FloatingActionButton fab) {
