@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.widget.RelativeLayout;
 
 import com.example.atv684.positivityreminders.Detail.QuoteDetailFragment;
+import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
 /**
  * Created by atv684 on 9/21/16.
@@ -19,6 +20,9 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //setup SQLiteOpenHelper singleton instance
+        QuoteDBHelper.get(this);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

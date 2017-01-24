@@ -42,7 +42,7 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
 
     static final String INTIAL_SETUP_PREFERENCE = "has_run_initial_setup";
 
-    QuoteDBHelper dbHelper = new QuoteDBHelper(getActivity(), this);
+    QuoteDBHelper dbHelper = QuoteDBHelper.get(this);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,11 +78,6 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
     public void onResume() {
         super.onResume();
 
-        dbHelper = new QuoteDBHelper(getContext(), this);
-
-
-
-
         String trackingTag = Constants.HOME_TAG;
 
         if (adapter.getItemCount() <= 0) {
@@ -109,7 +104,7 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "string");
         ((BaseActivity)getActivity()).getAnalytics().logEvent(Constants.PAGE_VIEWED_ITEM_NAME, bundle);
 
-        dbHelper.fetchQuotesFromOnline();
+        //dbHelper.fetchQuotesFromOnline();
 
         //fetch quotes on initial setup
         if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
@@ -164,10 +159,10 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
     @Override
     public void onDataFinished(ArrayList<QuoteObject> quotes) {
 
-//        Collections.shuffle(quotes, new Random(SystemClock.currentThreadTimeMillis()));
+        Collections.shuffle(quotes, new Random(SystemClock.currentThreadTimeMillis()));
 
         this.quotes.addAll(quotes);
-//        adapter.setItems(this.quotes);
+        adapter.setItems(this.quotes);
         adapter.notifyDataSetChanged();
     }
 }

@@ -11,18 +11,30 @@
             android:id="@+id/card_content"
             android:padding="15dp">
 
-        <ImageView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:scaleType="fitXY"
-                   android:id="@+id/image"
-            />
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="175dp"
+                        android:id="@+id/image_layout"
+                        android:orientation="vertical">
+            <ProgressBar
+                    android:layout_centerInParent="true"
+                    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+            </ProgressBar>
+
+            <ImageView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:id="@+id/image"/>
+        </RelativeLayout>
+
 
         <TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:padding="15dp"
-                android:layout_below="@+id/image"
+                android:layout_below="@+id/image_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="text"
@@ -30,7 +42,7 @@
                 style="@style/basic_text_style"
                 android:paddingBottom="30dp"
                 android:layout_centerHorizontal="true"
-                />
+        />
 
         <TextView
                 style="@style/basic_text_style"
@@ -41,7 +53,7 @@
                 android:id="@+id/author"
                 android:layout_below="@+id/text"
                 android:gravity="bottom"
-                />
+        />
 
         <RelativeLayout
                 android:paddingTop="10dp"

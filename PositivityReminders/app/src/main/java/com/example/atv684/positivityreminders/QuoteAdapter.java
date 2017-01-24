@@ -49,19 +49,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
     private void loadImageFromDatabase(final ViewHolder holder) {
 
-        AsyncTask<String, Integer, Bitmap> task = new AsyncTask<String, Integer, Bitmap>() {
-
-            @Override
-            protected Bitmap doInBackground(String... strings) {
-                Bitmap bitmap = new QuoteDBHelper(context, null).getImage();
-
-                if(bitmap != null){
-                    return bitmap;
-                }
-
-                return null;
-            }
-
+        GetImageFromDBAsyncTask task = new GetImageFromDBAsyncTask(context){
             @Override
             protected void onPostExecute(Bitmap bitmap) {
                 super.onPostExecute(bitmap);
@@ -76,8 +64,6 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        final QuoteDBHelper dbHelper = new QuoteDBHelper(context, null);
-
         final QuoteObject object = arrayList.get(position);
 
         holder.author.setText("-" + object.getAuthor());
@@ -85,7 +71,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
         setupFabColor(arrayList.get(position), holder.favoriteFab);
 
-        dbHelper.updateQuote(object);
+        final QuoteDBHelper dbHelper = QuoteDBHelper.get(context);
 
         holder.favoriteFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +118,8 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
         });
 
         loadImageFromDatabase(holder);
+
+
     }
 
     public void setupFabColor(QuoteObject object, FloatingActionButton fab) {

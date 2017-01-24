@@ -5,6 +5,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import android.content.Intent;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,8 @@ import com.example.atv684.positivityreminders.Schedules.AddScheduleActivity;
 import com.example.atv684.positivityreminders.Schedules.ViewScheduleActivity;
 
 import java.util.ArrayList;
+
+import static java.security.AccessController.getContext;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -55,8 +58,11 @@ public class BaseActivity extends AppCompatActivity {
             }
         });
 
+        String android_id = "FE4FE93518F6AB21F1CDEAA5AE531872";
         mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder()
+            .addTestDevice(android_id)
+            .build();
         mAdView.loadAd(adRequest);
 
         setupMenuOptions();

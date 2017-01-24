@@ -46,7 +46,7 @@ public class NotificationScheduler {
 
     public ScheduleObject getNextSchedule(){
 
-        ArrayList<ScheduleObject> schedules = new QuoteDBHelper(context, null).getSchedules();
+        ArrayList<ScheduleObject> schedules = QuoteDBHelper.get(context).getSchedules();
 
         Date startTime = null;
         Date endTime;

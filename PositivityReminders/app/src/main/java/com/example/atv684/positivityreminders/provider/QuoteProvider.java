@@ -43,7 +43,7 @@ public class QuoteProvider extends ContentProvider implements QuoteDBHelper.DBHe
 
     @Override
     public boolean onCreate() {
-        dbHelper = new QuoteDBHelper(getContext(), this);
+        dbHelper = QuoteDBHelper.get(getContext());
         return true;
     }
 

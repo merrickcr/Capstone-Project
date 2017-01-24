@@ -98,7 +98,7 @@ public class AddScheduleFragment extends Fragment {
         schedule.setStartTime(startTime);
         schedule.setDays(QuotesContract.ScheduleEntry.FULL_WEEK);
 
-        long id = new QuoteDBHelper(getContext(), null).addSchedule(schedule);
+        long id = QuoteDBHelper.get(getContext()).addSchedule(schedule);
 
         schedule.setId(id);
 

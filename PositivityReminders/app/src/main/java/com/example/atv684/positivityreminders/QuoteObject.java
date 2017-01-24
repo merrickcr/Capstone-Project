@@ -3,6 +3,7 @@ package com.example.atv684.positivityreminders;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 import com.example.atv684.positivityreminders.provider.QuotesContract;
 
 import org.json.JSONException;
@@ -29,6 +30,7 @@ public class QuoteObject {
 
     public QuoteObject(Cursor c){
 
+
         if(c.getCount() <= 0 ) return;
 
         text = c.getString(c.getColumnIndex(QuotesContract.QuoteEntry.COLUMN_TEXT));
@@ -40,7 +42,6 @@ public class QuoteObject {
     }
 
     public QuoteObject(String jsonString){
-
 
         try {
             JSONObject json = new JSONObject(jsonString);

@@ -12,11 +12,11 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.atv684.positivityreminders.BaseActivity;
@@ -49,7 +49,7 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     private static final Object LOCK_OBJECT = new Object();
 
-    private final Context context;
+    private Context context;
 
     private int requestCount = 0;
 
@@ -59,15 +59,33 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     private SQLiteDatabase db;
 
-    DBHelperCallbackListener listener;
+    private DBHelperCallbackListener listener;
 
     private ArrayList<Request> requestQueue = new ArrayList<Request>();
 
-    public QuoteDBHelper(Context context, DBHelperCallbackListener listener) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    private static volatile QuoteDBHelper instance;
 
+    @NonNull
+    public static QuoteDBHelper get(@NonNull DBHelperCallbackListener listener) {
+        instance.listener = listener;
+        return instance;
+    }
+
+    @NonNull
+    public static QuoteDBHelper get(@NonNull Context context) {
+        if (instance == null) {
+            synchronized (QuoteDBHelper.class) {
+                instance = new QuoteDBHelper(context);
+            }
+        } else {
+            instance.context = context;
+        }
+        return instance;
+    }
+
+    private QuoteDBHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
-        this.listener = listener;
     }
 
     @Override
@@ -139,7 +157,7 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         return db.insert(TABLE_NAME, null, values);
     }
 
-    public Bitmap getImage(){
+    public byte[] getImage(){
 
         db = getWritableDatabase();
 
@@ -153,7 +171,7 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
         c.close();
 
-        return BitmapFactory.decodeByteArray(blob, 0, blob.length);
+        return blob;
     }
 
     public long addSchedule(ScheduleObject schedule){

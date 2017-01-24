@@ -27,7 +27,7 @@ public class ScheduleUtil {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)object.id, notificationIntent, 0);
         alarmManager.cancel(pendingIntent);
 
-        new QuoteDBHelper(context, null).deleteSchedule(object);
+        QuoteDBHelper.get(context).deleteSchedule(object);
 
         Log.e("deleted", "deleted schedule");
     }

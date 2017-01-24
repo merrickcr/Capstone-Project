@@ -61,7 +61,7 @@ public class QuoteDetailFragment extends Fragment {
             id = getArguments().getInt("id");
         }
 
-        dbHelper = new QuoteDBHelper(getActivity(), null);
+        dbHelper = QuoteDBHelper.get(getContext());
 
         quote = dbHelper.fetchQuoteById(id);
 

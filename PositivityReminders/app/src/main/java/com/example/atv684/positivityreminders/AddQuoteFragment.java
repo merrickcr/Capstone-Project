@@ -48,7 +48,7 @@ public class AddQuoteFragment extends Fragment implements QuoteDBHelper.DBHelper
 
     private void addQuote() {
 
-        QuoteDBHelper helper = new QuoteDBHelper(getContext(), this);
+        QuoteDBHelper helper = QuoteDBHelper.get(getContext());
 
         helper.addQuote(text.getText().toString(), author.getText().toString(), null);
 

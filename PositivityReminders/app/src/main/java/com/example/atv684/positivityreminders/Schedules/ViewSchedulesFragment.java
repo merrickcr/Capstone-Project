@@ -38,7 +38,7 @@ public class ViewSchedulesFragment extends Fragment {
         super.onResume();
         ArrayList<ScheduleObject> schedules = new ArrayList<>();
 
-        schedules = new QuoteDBHelper(getContext(), null).getSchedules();
+        schedules = QuoteDBHelper.get(getContext()).getSchedules();
         listView.setAdapter(new ScheduleListAdapter(getContext(), schedules));
     }
 

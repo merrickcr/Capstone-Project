@@ -24,7 +24,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
 
     private void showNotification(Context context) {
 
-        QuoteDBHelper dbHelper = new QuoteDBHelper(context, null);
+        QuoteDBHelper dbHelper = QuoteDBHelper.get(context);
 
         QuoteObject quote = dbHelper.readQuote();
 
