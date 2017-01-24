@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 /**
- * Created by atv684 on 9/21/16.
+ * Created Chris on 9/21/16.
  */
 public class AddQuoteActivity extends BaseActivity {
 

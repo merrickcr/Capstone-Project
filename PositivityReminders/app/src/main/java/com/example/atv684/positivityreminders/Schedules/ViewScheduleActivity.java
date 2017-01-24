@@ -12,7 +12,7 @@ import com.example.atv684.positivityreminders.BaseActivity;
 import com.example.atv684.positivityreminders.R;
 
 /**
- * Created by atv684 on 10/7/16.
+ * Created Chris on 10/7/16.
  */
 public class ViewScheduleActivity extends BaseActivity{
 

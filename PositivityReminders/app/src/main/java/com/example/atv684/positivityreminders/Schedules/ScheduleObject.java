@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 /**
- * Created by atv684 on 9/30/16.
+ * Created Chris on 9/30/16.
  */
 public class ScheduleObject {
 
@@ -57,6 +57,8 @@ public class ScheduleObject {
         if(c.getCount() <= 0){
             return;
         }
+
+        id = c.getInt(c.getColumnIndex(QuotesContract.ScheduleEntry._ID));
 
         startTime = new Date(c.getString(c.getColumnIndex(QuotesContract.ScheduleEntry.COLUMN_TIME)));
 

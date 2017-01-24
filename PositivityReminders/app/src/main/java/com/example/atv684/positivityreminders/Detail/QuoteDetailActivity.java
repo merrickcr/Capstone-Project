@@ -12,7 +12,7 @@ import com.example.atv684.positivityreminders.MainFragment;
 import com.example.atv684.positivityreminders.R;
 
 /**
- * Created by atv684 on 1/9/17.
+ * Created Chris on 1/9/17.
  */
 
 public class QuoteDetailActivity extends BaseActivity {

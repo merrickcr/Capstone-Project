@@ -15,7 +15,7 @@ import com.example.atv684.positivityreminders.QuoteObject;
 import java.util.ArrayList;
 
 /**
- * Created by atv684 on 9/19/16.
+ * Created Chris on 9/19/16.
  */
 public class QuoteProvider extends ContentProvider implements QuoteDBHelper.DBHelperCallbackListener {
 

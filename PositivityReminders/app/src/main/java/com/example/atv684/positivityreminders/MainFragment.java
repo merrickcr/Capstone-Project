@@ -6,24 +6,21 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
-import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -44,6 +41,10 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
 
     QuoteDBHelper dbHelper = QuoteDBHelper.get(this);
 
+    private RelativeLayout loadingLayout;
+
+    private TextView loadingText;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -54,10 +55,12 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.stack_view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+
+        loadingLayout = (RelativeLayout) view.findViewById(R.id.loading_layout);
+        loadingText = (TextView)view.findViewById(R.id.loading_text);
 
         adapter = new QuoteAdapter(getActivity(), quotes);
-        this.quotes.add(new QuoteObject("Blah"));
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -104,13 +107,16 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "string");
         ((BaseActivity)getActivity()).getAnalytics().logEvent(Constants.PAGE_VIEWED_ITEM_NAME, bundle);
 
-        //dbHelper.fetchQuotesFromOnline();
+        dbHelper.fetchQuotesFromOnline();
+        dbHelper.fetchImagesFromOnline();
 
         //fetch quotes on initial setup
         if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
+            loadingText.setText(getString(R.string.loading_first_time_data));
 //            dbHelper.fetchQuotesFromOnline();
 //            dbHelper.fetchImagesFromOnline();
         }
+
 
     }
 
@@ -160,6 +166,8 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
     public void onDataFinished(ArrayList<QuoteObject> quotes) {
 
         Collections.shuffle(quotes, new Random(SystemClock.currentThreadTimeMillis()));
+
+        loadingLayout.setVisibility(View.GONE);
 
         this.quotes.addAll(quotes);
         adapter.setItems(this.quotes);

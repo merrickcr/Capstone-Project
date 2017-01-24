@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by atv684 on 9/16/16.
+ * Created Chris on 9/16/16.
  */
 public class QuoteObject {
 

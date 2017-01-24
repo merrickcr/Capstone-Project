@@ -3,7 +3,8 @@
           package="com.example.atv684.positivityreminders">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <application
@@ -16,18 +17,22 @@
         <activity android:name=".BaseActivity">
         </activity>
 
-        <receiver android:name=".NotificationBroadcastReceiver"/>
+        <receiver android:name=".NotificationBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".Schedules.AddScheduleActivity"
-            android:label="@string/label_add_a_reminder"/>
+                  android:label="@string/label_add_a_reminder"/>
 
         <activity android:name=".AddQuoteActivity"
-            android:label="@string/cd_add_quote"/>
+                  android:label="@string/cd_add_quote"/>
 
         <activity android:name=".Detail.QuoteDetailActivity"/>
 
         <activity android:name=".MainActivity"
-            android:label="@string/app_name">
+                  android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -36,16 +41,16 @@
         </activity>
 
         <activity android:name=".Schedules.ViewScheduleActivity"
-            android:label="@string/label_view_schedules"/>
+                  android:label="@string/label_view_schedules"/>
 
-        <provider android:authorities="positivereminders.provider.quotes" android:name=".provider.QuoteProvider" />
+        <provider android:authorities="positivereminders.provider.quotes" android:name=".provider.QuoteProvider"/>
 
-        <receiver android:name=".widget.QuoteWidgetProvider" >
+        <receiver android:name=".widget.QuoteWidgetProvider">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
-                       android:resource="@xml/widget_xml" />
+                       android:resource="@xml/widget_xml"/>
         </receiver>
 
     </application>

@@ -10,7 +10,11 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.atv684.positivityreminders.Schedules.NotificationScheduler;
+import com.example.atv684.positivityreminders.Schedules.ScheduleObject;
+import com.example.atv684.positivityreminders.Schedules.ScheduleUtil;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
+
+import java.util.ArrayList;
 
 
 public class NotificationBroadcastReceiver extends BroadcastReceiver {
@@ -19,7 +23,20 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        showNotification(context);
+
+        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            //reboot alarm
+            //get all the schedules
+            ArrayList<ScheduleObject> schedules = QuoteDBHelper.get(context).getSchedules();
+
+            NotificationScheduler scheduler = new NotificationScheduler(context);
+            for(ScheduleObject object : schedules){
+                scheduler.scheduleNotification(object);
+            }
+        }
+        else {
+            showNotification(context);
+        }
     }
 
     private void showNotification(Context context) {

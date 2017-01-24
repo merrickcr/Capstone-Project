@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ServiceCompat;
 import android.view.LayoutInflater;
@@ -18,14 +19,13 @@ import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-/**
- * Created by atv684 on 10/7/16.
- */
 public class ViewSchedulesFragment extends Fragment {
 
     ListView listView;
 
     FloatingActionButton addScheduleFab;
+
+    public static final int ADD_SCHEDULE_REQUEST_CODE = 1;
 
     @Nullable
     @Override
@@ -54,12 +54,17 @@ public class ViewSchedulesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AddScheduleActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, ADD_SCHEDULE_REQUEST_CODE);
             }
         });
-
-
-
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == ADD_SCHEDULE_REQUEST_CODE){
+            Snackbar.make(getView(), getString(R.string.snackbar_quote_has_been_added), Snackbar.LENGTH_LONG).show();
+        }
+    }
 }

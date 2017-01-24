@@ -1,7 +1,7 @@
 package com.example.atv684.positivityreminders;
 
 /**
- * Created by atv684 on 1/9/17.
+ * Created Chris on 1/9/17.
  */
 
 public class Constants {

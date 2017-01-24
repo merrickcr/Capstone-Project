@@ -49,7 +49,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
     private void loadImageFromDatabase(final ViewHolder holder) {
 
-        GetImageFromDBAsyncTask task = new GetImageFromDBAsyncTask(context){
+        GetImageFromDBAsyncTask task = new GetImageFromDBAsyncTask(context) {
             @Override
             protected void onPostExecute(Bitmap bitmap) {
                 super.onPostExecute(bitmap);
@@ -58,7 +58,17 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
             }
         };
 
+        holder.setTask(task);
+
         task.execute("test");
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.image.setImageDrawable(null);
+        holder.task.cancel(true);
+
     }
 
     @Override
@@ -155,6 +165,8 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
         View root;
 
+        private GetImageFromDBAsyncTask task;
+
         public ViewHolder(View view) {
             super(view);
 
@@ -166,6 +178,10 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
             deleteFab = (FloatingActionButton) view.findViewById(R.id.delete_fab);
             favoriteFab = (FloatingActionButton) view.findViewById(R.id.favorite_fab);
+        }
+
+        public void setTask(GetImageFromDBAsyncTask task) {
+            this.task = task;
         }
     }
 

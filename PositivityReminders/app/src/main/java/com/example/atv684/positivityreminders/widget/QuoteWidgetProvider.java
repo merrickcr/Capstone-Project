@@ -56,18 +56,21 @@ public class QuoteWidgetProvider extends AppWidgetProvider implements QuoteDBHel
             quotes.add(new QuoteObject(c));
         }
 
-
-        new GetImageFromDBAsyncTask(context){
+        new GetImageFromDBAsyncTask(context) {
             @Override
             protected void onPostExecute(Bitmap bitmap) {
                 super.onPostExecute(bitmap);
 
                 Palette palette = Palette.from(bitmap).generate();
 
+
+
                 final Context finalContext = context;
                 final AppWidgetManager manager = appWidgetManager;
 
-                int color = palette.getDarkVibrantColor(ContextCompat.getColor(finalContext, R.color.white));
+                int color = palette.getDominantColor(ContextCompat.getColor(finalContext, R.color.white));
+
+                int contrastColor = getContrastColor(color);
 
                 int count = appWidgetIds.length;
                 for (int i = 0; i < count; i++) {
@@ -79,9 +82,9 @@ public class QuoteWidgetProvider extends AppWidgetProvider implements QuoteDBHel
                         R.layout.widget_layout);
 
                     remoteViews.setTextViewText(R.id.text, quote.getText());
-                    remoteViews.setTextColor(R.id.text, color);
+                    remoteViews.setTextColor(R.id.text, contrastColor);
                     remoteViews.setTextViewText(R.id.author, quote.getAuthor());
-                    remoteViews.setTextColor(R.id.author, color);
+                    remoteViews.setTextColor(R.id.author, contrastColor);
 
                     remoteViews.setImageViewBitmap(R.id.image, bitmap);
 
@@ -95,29 +98,8 @@ public class QuoteWidgetProvider extends AppWidgetProvider implements QuoteDBHel
                     manager.updateAppWidget(widgetId, remoteViews);
                 }
             }
-        };
+        }.execute("");
     }
-
-    Target target = new Target() {
-
-
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-
-        }
-
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-
-            Log.e("asdf", "asdf");
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-            Log.e("asdf", "asdf");
-        }
-    };
-
 
     @Override
     public void onLoadOnlineQuotes() {
@@ -128,4 +110,21 @@ public class QuoteWidgetProvider extends AppWidgetProvider implements QuoteDBHel
     public void onDataFinished(ArrayList<QuoteObject> quotes) {
 
     }
+
+    /**
+     * http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
+     * as seen on stack overflow
+     * @param colorIntValue
+     * @return
+     */
+    // Put this method in whichever class you deem appropriate
+    // static or non-static, up to you.
+    public static int getContrastColor(int colorIntValue) {
+        int red = Color.red(colorIntValue);
+        int green = Color.green(colorIntValue);
+        int blue = Color.blue(colorIntValue);
+        double lum = (((0.299 * red) + ((0.587 * green) + (0.114 * blue))));
+        return lum > 186 ? 0xFF000000 : 0xFFFFFFFF;
+    }
+
 }

@@ -19,7 +19,7 @@ public class NotificationScheduler {
 
     Context context;
 
-    public NotificationScheduler(Context context){
+    public NotificationScheduler(Context context) {
         this.context = context;
     }
 
@@ -31,20 +31,18 @@ public class NotificationScheduler {
         return builder.build();
     }
 
-    public void scheduleNotification(ScheduleObject scheduleObject){
+    public void scheduleNotification(ScheduleObject scheduleObject) {
 
         Intent notificationIntent = new Intent(context, NotificationBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ((int)scheduleObject.id), notificationIntent,
-            PendingIntent
-            .FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ((int) scheduleObject.id), notificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT);
 
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC, scheduleObject.getStartTime().getTime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES ,
-            pendingIntent);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC, scheduleObject.getStartTime().getTime(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
     }
 
-    public ScheduleObject getNextSchedule(){
+    public ScheduleObject getNextSchedule() {
 
         ArrayList<ScheduleObject> schedules = QuoteDBHelper.get(context).getSchedules();
 
@@ -57,11 +55,11 @@ public class NotificationScheduler {
         long diff = 0;
         long currentDif = Long.MAX_VALUE;
 
-        for(ScheduleObject schedule : schedules){
-            if(schedule.startTime != null){
+        for (ScheduleObject schedule : schedules) {
+            if (schedule.startTime != null) {
                 diff = schedule.startTime.getTime() - now.getTime();
             }
-            if(startTime == null || diff < currentDif && diff > 0){
+            if (startTime == null || diff < currentDif && diff > 0) {
                 startTime = schedule.getStartTime();
                 returnSchedule = schedule;
                 currentDif = diff;
@@ -71,13 +69,12 @@ public class NotificationScheduler {
         return returnSchedule;
     }
 
-    public int compareTimes(Date d1, Date d2)
-    {
-        int     t1;
-        int     t2;
+    public int compareTimes(Date d1, Date d2) {
+        int t1;
+        int t2;
 
-        t1 = (int) (d1.getTime() % (24*60*60*1000L));
-        t2 = (int) (d2.getTime() % (24*60*60*1000L));
+        t1 = (int) (d1.getTime() % (24 * 60 * 60 * 1000L));
+        t2 = (int) (d2.getTime() % (24 * 60 * 60 * 1000L));
         return (t1 - t2);
     }
 

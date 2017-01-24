@@ -37,7 +37,7 @@ import okhttp3.Response;
 
 
 /**
- * Created by atv684 on 9/19/16.
+ * Created Chris on 9/19/16.
  */
 public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -105,12 +105,12 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     // Table create statement
     private static final String CREATE_IMAGE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" +
-        "_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
         IMAGE_KEY_NAME + " TEXT," +
         IMAGE_KEY_IMAGE + " BLOB UNIQUE);";
 
     private static final String CREATE_SCHEDULE_TABLE = "CREATE TABLE " + QuotesContract.ScheduleEntry.TABLE_NAME + "(" +
-        "_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        QuotesContract.ScheduleEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
         QuotesContract.ScheduleEntry.COLUMN_TIME + " STRING," +
         QuotesContract.ScheduleEntry.COLUMN_DAYS + " STRING);";
 
@@ -178,8 +178,11 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(QuotesContract.ScheduleEntry.COLUMN_DAYS, schedule.getDaysJSONArray().toString());
-        values.put(QuotesContract.ScheduleEntry.COLUMN_TIME, schedule.getStartTime().toString());
+
+
+        values.put(QuotesContract.ScheduleEntry.COLUMN_DAYS, (schedule.getDaysJSONArray() != null) ? schedule.getDaysJSONArray()
+            .toString() : "");
+        values.put(QuotesContract.ScheduleEntry.COLUMN_TIME, (schedule.getStartTime() != null) ? schedule.getStartTime().toString() : "");
 
         long result = db.insert(QuotesContract.ScheduleEntry.TABLE_NAME, null, values);
 
@@ -192,7 +195,7 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
         db = getWritableDatabase();
 
-        int result = db.delete(QuotesContract.ScheduleEntry.TABLE_NAME, "_ID = ?", new String[] { String.valueOf(schedule.getId()) });
+        int result = db.delete(QuotesContract.ScheduleEntry.TABLE_NAME, "_id = ?", new String[] { String.valueOf(schedule.getId()) });
 
         Log.e("deleting", "deleted results = " + result);
 
@@ -208,6 +211,8 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         while(c.moveToNext()){
             schedules.add(new ScheduleObject(c));
         }
+
+        c.close();
 
         return schedules;
     }

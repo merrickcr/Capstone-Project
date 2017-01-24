@@ -1,5 +1,6 @@
 package com.example.atv684.positivityreminders.Schedules;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -19,9 +20,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.atv684.positivityreminders.MainActivity;
 import com.example.atv684.positivityreminders.NotificationBroadcastReceiver;
@@ -34,9 +37,9 @@ import java.util.Date;
 import java.util.HashSet;
 
 /**
- * Created by atv684 on 10/1/16.
+ * Created Chris on 10/1/16.
  */
-public class AddScheduleFragment extends Fragment {
+public class AddScheduleFragment extends Fragment implements DayToggleButton.OnDayToggledListener{
 
     private Button startTimeButton;
 
@@ -83,6 +86,17 @@ public class AddScheduleFragment extends Fragment {
             }
         });
 
+        LinearLayout daysLayout = (LinearLayout) view.findViewById(R.id.day_layout);
+
+        daysLayout.addView(new DayToggleButton(getContext(), this, getString(R.string.monday_label)));
+        daysLayout.addView(new DayToggleButton(getContext(), this, getString(R.string.tuesday_label)));
+        daysLayout.addView(new DayToggleButton(getContext(), this, getString(R.string.wednesday_label)));
+        daysLayout.addView(new DayToggleButton(getContext(), this, getString(R.string.thursday_label)));
+        daysLayout.addView(new DayToggleButton(getContext(), this, getString(R.string.friday_label)));
+        daysLayout.addView(new DayToggleButton(getContext(), this, getString(R.string.saturday_label)));
+        daysLayout.addView(new DayToggleButton(getContext(), this, getString(R.string.sunday_label)));
+
+
 
         addScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,16 +112,31 @@ public class AddScheduleFragment extends Fragment {
         schedule.setStartTime(startTime);
         schedule.setDays(QuotesContract.ScheduleEntry.FULL_WEEK);
 
+        if(schedule.getStartTime() == null || schedule.getDaysJSONArray() == null){
+            Snackbar.make(getView(), R.string.must_specify_time, Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(schedule.getDaysJSONArray().length() <= 0){
+            Snackbar.make(getView(), R.string.must_be_day_of_week, Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
         long id = QuoteDBHelper.get(getContext()).addSchedule(schedule);
 
         schedule.setId(id);
 
-        Snackbar.make(getView(), "Added a schedule!", Snackbar.LENGTH_LONG).show();
-
         NotificationScheduler scheduler = new NotificationScheduler(getContext());
         scheduler.scheduleNotification(schedule);
+
+
+        getActivity().finish();
+        getActivity().setResult(Activity.RESULT_OK);
 
     }
 
 
+    @Override
+    public void onDayToggled(boolean isChecked, String day) {
+
+    }
 }

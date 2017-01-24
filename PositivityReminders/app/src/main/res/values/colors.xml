@@ -7,4 +7,9 @@
     <color name="white">#FFFFFF</color>
 
     <color name="light_gray">#29021829</color>
+    <color name="capital_one_dark_green">#FF1C842A</color>
+    <color name="lightest_gray">#15021829</color>
+    <color name="dark_cyan">#FF0470A8</color>
+    <color name="raised_button_background_default">#FF008BC1</color>
+    <color name="capital_one_light_light_gray">#29021829</color>
 </resources>

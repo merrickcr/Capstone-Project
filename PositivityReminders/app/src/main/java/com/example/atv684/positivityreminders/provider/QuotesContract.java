@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by atv684 on 9/19/16.
+ * Created Chris on 9/19/16.
  */
 public class QuotesContract {
 
@@ -36,8 +36,8 @@ public class QuotesContract {
         public static final String WEDNESDAY = "W";
         public static final String THURSDAY = "Tr";
         public static final String FRIDAY = "F";
-        public static final String SATURDAY = "Sat";
-        public static final String SUNDAY = "Sun";
+        public static final String SATURDAY = "Sa";
+        public static final String SUNDAY = "Su";
 
         public static final ArrayList<String> FULL_WEEK = new ArrayList<>(Arrays.asList(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY,
             SATURDAY, SUNDAY));

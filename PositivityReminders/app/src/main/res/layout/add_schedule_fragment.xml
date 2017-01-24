@@ -33,16 +33,74 @@
         />
 
 
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_below="@id/start_time_button"
+                android:orientation="horizontal"
+                android:id="@+id/day_layout">
+            <!--<ToggleButton-->
+                    <!--style="@style/primary_button"-->
+                    <!--android:textOn="@string/monday_label"-->
+                    <!--android:textOff="@string/monday_label"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_height="wrap_content"/>-->
+            <!--<ToggleButton-->
+                    <!--style="@style/primary_button"-->
+                    <!--android:textOn="@string/tuesday_label"-->
+                    <!--android:textOff="@string/tuesday_label"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_height="wrap_content"/>-->
+            <!--<ToggleButton-->
+                    <!--style="@style/day_button"-->
+                    <!--android:textOn="@string/wednesday_label"-->
+                    <!--android:textOff="@string/wednesday_label"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_height="wrap_content"/>-->
+            <!--<ToggleButton-->
+                    <!--style="@style/day_button"-->
+                    <!--android:textOn="@string/thursday_label"-->
+                    <!--android:textOff="@string/thursday_label"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_height="wrap_content"/>-->
+            <!--<ToggleButton-->
+                    <!--style="@style/day_button"-->
+                    <!--android:textOff="@string/friday_label"-->
+                    <!--android:textOn="@string/friday_label"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_height="wrap_content"/>-->
+            <!--<ToggleButton-->
+                    <!--style="@style/day_button"-->
+                    <!--android:textOn="@string/saturday_label"-->
+                    <!--android:textOff="@string/saturday_label"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_height="wrap_content"/>-->
+            <!--<ToggleButton-->
+                    <!--style="@style/day_button"-->
+                    <!--android:textOn="@string/sunday_label"-->
+                    <!--android:textOff="@string/sunday_label"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_height="wrap_content"/>-->
+        </LinearLayout>
 
 
         <Button
+                android:layout_below="@id/day_layout"
                 android:text="@string/add_reminder"
                 android:layout_marginTop="15dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="20dp"
                 android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:id="@+id/add_schedule_button"
-                android:layout_below="@+id/start_time_button"
                 style="@style/primary_button"/>
 
     </RelativeLayout>

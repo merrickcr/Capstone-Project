@@ -22,4 +22,14 @@
     <string name="cd_delete">delete</string>
     <string name="add_a_reminder">Add a Reminder</string>
     <string name="add_reminder">Add Reminder</string>
+    <string name="loading_first_time_data">Loading first time data</string>
+    <string name="must_be_day_of_week">Must be scheduled for at least one day of the week</string>
+    <string name="must_specify_time">Must Specify a time</string>
+    <string name="thursday_label">R</string>
+    <string name="wednesday_label">W</string>
+    <string name="tuesday_label">T</string>
+    <string name="monday_label">M</string>
+    <string name="friday_label">F</string>
+    <string name="saturday_label">Sa</string>
+    <string name="sunday_label">Su</string>
 </resources>
