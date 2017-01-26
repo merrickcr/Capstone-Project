@@ -56,12 +56,15 @@ public class ScheduleListAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.startTime = (TextView) view.findViewById(R.id.start_time_textview);
             holder.deleteButton = (ImageButton) view.findViewById(R.id.delete_button);
+            holder.days = (TextView) view.findViewById(R.id.days_of_week);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.startTime.setText(ScheduleUtil.dateFormat.format(getItem(pos).getStartTime()));
+        ScheduleObject object = getItem(pos);
+
+        holder.startTime.setText(ScheduleUtil.dateFormat.format(object.getStartTime()));
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +72,14 @@ public class ScheduleListAdapter extends BaseAdapter {
                 deleteSchedule(getItem(finalPos));
             }
         });
+
+
+        String daysString = "";
+
+        for(int i = 0; i < object.getDaysJSONArray().length(); i++) {
+            daysString += object.getDaysJSONArray().optString(i) + " ";
+        }
+        holder.days.setText(daysString);
 
         return view;
     }
@@ -78,9 +89,9 @@ public class ScheduleListAdapter extends BaseAdapter {
 
         TextView startTime;
 
-        TextView frequency;
-
         ImageButton deleteButton;
+
+        public TextView days;
     }
 
 

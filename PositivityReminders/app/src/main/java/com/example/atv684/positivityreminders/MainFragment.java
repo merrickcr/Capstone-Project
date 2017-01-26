@@ -112,7 +112,7 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
 
         //fetch quotes on initial setup
         if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
-            loadingText.setText(getString(R.string.loading_first_time_data));
+            //loadingText.setText(getString(R.string.loading_first_time_data));
 //            dbHelper.fetchQuotesFromOnline();
 //            dbHelper.fetchImagesFromOnline();
         }
@@ -139,6 +139,14 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
         //randomize
         Collections.shuffle(list, new Random(System.currentTimeMillis()));
 
+        if(quotes.isEmpty()){
+            loadingText.setText(R.string.nothing_here);
+            loadingLayout.findViewById(R.id.progress_bar).setVisibility(View.GONE);
+        }
+        else{
+            loadingLayout.setVisibility(View.GONE);
+        }
+
         this.quotes.addAll(quotes);
         adapter.setItems(list);
         adapter.notifyDataSetChanged();
@@ -158,8 +166,10 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
     public void onLoadOnlineQuotes() {
 
         if (adapter.getItemCount() <= 0) {
-            //dbHelper.fetchQuotesFromDB();
+            dbHelper.fetchQuotesFromDB();
         }
+
+        loadingLayout.setVisibility(View.GONE);
     }
 
     @Override

@@ -17,6 +17,8 @@ public class DayToggleButton extends LinearLayout {
 
     Context context;
 
+    private ToggleButton toggleButton;
+
     public DayToggleButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
@@ -50,7 +52,7 @@ public class DayToggleButton extends LinearLayout {
 
         inflate(context, R.layout.toggle_button, this);
 
-        final ToggleButton toggleButton = (ToggleButton) findViewById(R.id.toggle_button);
+        toggleButton = (ToggleButton) findViewById(R.id.toggle_button);
 
         toggleButton.setText(label);
         toggleButton.setTextOff(label);
@@ -88,5 +90,9 @@ public class DayToggleButton extends LinearLayout {
 
     public void setListener(OnDayToggledListener listener) {
         this.listener = listener;
+    }
+
+    public boolean isChecked(){
+        return toggleButton.isChecked();
     }
 }

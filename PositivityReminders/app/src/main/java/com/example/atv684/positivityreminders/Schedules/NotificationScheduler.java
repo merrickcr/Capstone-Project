@@ -11,6 +11,9 @@ import com.example.atv684.positivityreminders.NotificationBroadcastReceiver;
 import com.example.atv684.positivityreminders.R;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,8 +37,12 @@ public class NotificationScheduler {
     public void scheduleNotification(ScheduleObject scheduleObject) {
 
         Intent notificationIntent = new Intent(context, NotificationBroadcastReceiver.class);
+
+        notificationIntent.putExtra("schedule", scheduleObject.getId());
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ((int) scheduleObject.id), notificationIntent,
             PendingIntent.FLAG_UPDATE_CURRENT);
+
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC, scheduleObject.getStartTime().getTime(), AlarmManager.INTERVAL_DAY, pendingIntent);

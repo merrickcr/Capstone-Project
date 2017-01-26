@@ -20,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.atv684.positivityreminders.BaseActivity;
+import com.example.atv684.positivityreminders.ImageUtil;
 import com.example.atv684.positivityreminders.QuoteObject;
 import com.example.atv684.positivityreminders.Schedules.ScheduleObject;
 import com.squareup.picasso.Picasso;
@@ -55,7 +56,7 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     private int imageRequestCount = 0;
 
-    private static final int REQUEST_COUNT_MAX = 100;
+    private static final int REQUEST_COUNT_MAX = 20;
 
     private SQLiteDatabase db;
 
@@ -141,18 +142,17 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     }
 
-    public static byte[] getBitmapAsByteArray(Bitmap bitmap) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
-        return outputStream.toByteArray();
-    }
 
     public long addImage(Bitmap bitmap){
+
+        Bitmap scaled = ImageUtil.decodeSampledBitmapFromResource(ImageUtil.getBitmapAsByteArray(bitmap), bitmap.getHeight(), bitmap.getWidth
+            ());
+
         db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(IMAGE_KEY_NAME, "image"+new Random(SystemClock.currentThreadTimeMillis()).nextInt(100000));
-        values.put(IMAGE_KEY_IMAGE, getBitmapAsByteArray(bitmap));
+        values.put(IMAGE_KEY_IMAGE, ImageUtil.getBitmapAsByteArray(scaled));
 
         return db.insert(TABLE_NAME, null, values);
     }
@@ -454,7 +454,7 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
                 new Thread(new Runnable() {
                     public void run() {
                         try {
-                            addImage(Picasso.with(context).load("https://source.unsplash.com/category/nature/800x600").get());
+                            addImage(Picasso.with(context).load("https://source.unsplash.com/category/nature/400x200").get());
                         } catch (IOException e) {
                             Log.e("MAINFRAGMENT", e.getMessage());
                         }
@@ -462,6 +462,16 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
                 }).start();
             }
         }
+    }
+
+    public ScheduleObject getSchedule(long id) {
+
+        Cursor c = db.query(QuotesContract.ScheduleEntry.TABLE_NAME, null, "_id = ?", new String[]{String.valueOf(id)}, null, null, null);
+
+        if(c.moveToFirst()){
+            return new ScheduleObject(c);
+        }
+        return null;
     }
 
     public interface DBHelperCallbackListener {

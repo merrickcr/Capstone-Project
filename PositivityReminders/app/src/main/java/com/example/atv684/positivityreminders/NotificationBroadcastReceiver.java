@@ -13,16 +13,26 @@ import com.example.atv684.positivityreminders.Schedules.NotificationScheduler;
 import com.example.atv684.positivityreminders.Schedules.ScheduleObject;
 import com.example.atv684.positivityreminders.Schedules.ScheduleUtil;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
+import com.example.atv684.positivityreminders.provider.QuotesContract;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class NotificationBroadcastReceiver extends BroadcastReceiver {
 
     Context context;
 
+    private ScheduleObject schedule;
+
     @Override
     public void onReceive(Context context, Intent intent) {
+
 
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             //reboot alarm
@@ -35,15 +45,56 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
             }
         }
         else {
-            showNotification(context);
+
+            long id = intent.getLongExtra("schedule", -1);
+
+            showNotification(context, id);
         }
     }
 
-    private void showNotification(Context context) {
+    private void showNotification(Context context, long id) {
 
         QuoteDBHelper dbHelper = QuoteDBHelper.get(context);
 
         QuoteObject quote = dbHelper.readQuote();
+
+
+        Date today = new Date();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE");
+
+        schedule = dbHelper.getSchedule(id);
+
+        String day = "";
+
+        switch (formatter.format(today)){
+            case "Mon":
+                day = QuotesContract.ScheduleEntry.MONDAY;
+                break;
+            case "Tue":
+                day = QuotesContract.ScheduleEntry.TUESDAY;
+                break;
+            case "Wed":
+                day = QuotesContract.ScheduleEntry.WEDNESDAY;
+                break;
+            case "Thu":
+                day = QuotesContract.ScheduleEntry.THURSDAY;
+                break;
+            case "Fri":
+                day = QuotesContract.ScheduleEntry.FRIDAY;
+                break;
+            case "Sat":
+                day = QuotesContract.ScheduleEntry.SATURDAY;
+                break;
+            case "Sun":
+                day = QuotesContract.ScheduleEntry.SUNDAY;
+                break;
+        }
+
+        if(schedule.getDays().contains(day) == false){
+            return;
+        }
+
 
         Log.i("notification", "visible");
 

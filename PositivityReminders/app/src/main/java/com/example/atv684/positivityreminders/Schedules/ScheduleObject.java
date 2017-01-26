@@ -142,6 +142,10 @@ public class ScheduleObject {
         this.days = days;
     }
 
+    public ArrayList<String> getDays() {
+        return days;
+    }
+
     public long getId() {
         return id;
     }

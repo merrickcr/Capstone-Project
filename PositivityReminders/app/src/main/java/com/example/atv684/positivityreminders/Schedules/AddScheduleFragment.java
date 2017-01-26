@@ -32,6 +32,9 @@ import com.example.atv684.positivityreminders.R;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 import com.example.atv684.positivityreminders.provider.QuotesContract;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -47,6 +50,8 @@ public class AddScheduleFragment extends Fragment implements DayToggleButton.OnD
 
 
     private Button addScheduleButton;
+
+    private LinearLayout daysLayout;
 
     @Nullable
     @Override
@@ -86,7 +91,7 @@ public class AddScheduleFragment extends Fragment implements DayToggleButton.OnD
             }
         });
 
-        LinearLayout daysLayout = (LinearLayout) view.findViewById(R.id.day_layout);
+        daysLayout = (LinearLayout) view.findViewById(R.id.day_layout);
 
         daysLayout.addView(new DayToggleButton(getContext(), this, getString(R.string.monday_label)));
         daysLayout.addView(new DayToggleButton(getContext(), this, getString(R.string.tuesday_label)));
@@ -97,7 +102,6 @@ public class AddScheduleFragment extends Fragment implements DayToggleButton.OnD
         daysLayout.addView(new DayToggleButton(getContext(), this, getString(R.string.sunday_label)));
 
 
-
         addScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,11 +110,31 @@ public class AddScheduleFragment extends Fragment implements DayToggleButton.OnD
         });
     }
 
+    public JSONArray parseDays(){
+
+        JSONArray daysJson = new JSONArray();
+
+        for(int i = 0; i < daysLayout.getChildCount(); i++){
+
+            View view = daysLayout.getChildAt(i);
+
+            if(view instanceof DayToggleButton){
+                DayToggleButton toggle = (DayToggleButton) view;
+                if(toggle.isChecked()) {
+                    daysJson.put(((DayToggleButton) view).getLabel());
+                }
+            }
+        }
+
+        return daysJson;
+
+    }
+
     private void addNewSchedule(){
 
         ScheduleObject schedule = new ScheduleObject();
         schedule.setStartTime(startTime);
-        schedule.setDays(QuotesContract.ScheduleEntry.FULL_WEEK);
+        schedule.setDays(parseDays());
 
         if(schedule.getStartTime() == null || schedule.getDaysJSONArray() == null){
             Snackbar.make(getView(), R.string.must_specify_time, Toast.LENGTH_LONG).show();

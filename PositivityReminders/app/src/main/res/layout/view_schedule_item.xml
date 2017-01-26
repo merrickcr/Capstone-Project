@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_margin="5dp"
                 android:layout_height="match_parent"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:padding="10dp">
 
     <TextView
             style="@style/basic_text_style"
@@ -15,7 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/start_time_label"
-            android:text="Time: "/>
+            android:text="@string/time"/>
     <TextView
             style="@style/basic_text_style"
             android:layout_centerVertical="true"
@@ -24,17 +21,25 @@
             android:layout_height="wrap_content"
             android:id="@+id/start_time_textview"/>
 
+    <TextView
+            android:paddingTop="7dp"
+            style="@style/basic_text_style"
+            android:layout_below="@id/start_time_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/days_of_week"/>
+
 
     <ImageButton android:layout_width="50dp"
                  android:layout_height="match_parent"
-                 android:text="Delete"
+                 android:text="@string/delete"
                  android:layout_alignParentRight="true"
                  android:layout_centerVertical="true"
                  android:id="@+id/delete_button"
                  android:backgroundTint="@color/colorPrimaryDark"
                  android:src="@drawable/ic_delete_forever_white_24dp"
                  android:contentDescription="@string/cd_delete"
-                 android:gravity="right"/>
+                 android:gravity="end"/>
 
 
 </RelativeLayout>
