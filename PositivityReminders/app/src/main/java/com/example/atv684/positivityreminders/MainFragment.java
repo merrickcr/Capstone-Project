@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnScrollChangeListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,7 +41,7 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
 
     static final String INTIAL_SETUP_PREFERENCE = "has_run_initial_setup";
 
-    QuoteDBHelper dbHelper = QuoteDBHelper.get(this);
+    QuoteDBHelper dbHelper;
 
     private RelativeLayout loadingLayout;
 
@@ -55,6 +57,8 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        dbHelper = QuoteDBHelper.get(getContext(), this);
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         loadingLayout = (RelativeLayout) view.findViewById(R.id.loading_layout);
@@ -65,6 +69,7 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+
 
 //        fab = (FloatingActionButton) view.findViewById(R.id.fab);
 //
@@ -96,7 +101,12 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
                     trackingTag = Constants.CUSTOM_TAG;
                 }
             } else {
-                dbHelper.fetchQuotesFromDB();
+                if (PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
+                    dbHelper.fetchQuotesFromDB();
+
+                    dbHelper.fetchQuotesFromOnline();
+                    dbHelper.fetchImagesFromOnline();
+                }
             }
 
         }
@@ -107,14 +117,17 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "string");
         ((BaseActivity)getActivity()).getAnalytics().logEvent(Constants.PAGE_VIEWED_ITEM_NAME, bundle);
 
-        dbHelper.fetchQuotesFromOnline();
-        dbHelper.fetchImagesFromOnline();
+
 
         //fetch quotes on initial setup
         if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
-            //loadingText.setText(getString(R.string.loading_first_time_data));
-//            dbHelper.fetchQuotesFromOnline();
-//            dbHelper.fetchImagesFromOnline();
+
+            loadingText.setText(getString(R.string.loading_first_time_data));
+            dbHelper.fetchQuotesFromOnline();
+            dbHelper.fetchImagesFromOnline();
+        }
+        else{
+            loadingText.setText(R.string.loading_data);
         }
 
 
@@ -135,6 +148,8 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
         while (c.moveToNext()) {
             list.add(new QuoteObject(c));
         }
+
+        c.close();
 
         //randomize
         Collections.shuffle(list, new Random(System.currentTimeMillis()));
@@ -165,22 +180,41 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
     @Override
     public void onLoadOnlineQuotes() {
 
+        PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean(INTIAL_SETUP_PREFERENCE, true).commit();
+
         if (adapter.getItemCount() <= 0) {
             dbHelper.fetchQuotesFromDB();
         }
+        else{
+            loadingLayout.setVisibility(View.GONE);
+        }
 
-        loadingLayout.setVisibility(View.GONE);
+
     }
 
     @Override
-    public void onDataFinished(ArrayList<QuoteObject> quotes) {
+    public void onDataFinished(final ArrayList<QuoteObject> quotes) {
 
-        Collections.shuffle(quotes, new Random(SystemClock.currentThreadTimeMillis()));
+        if(quotes.size() < 20){
+            dbHelper.fetchQuotesFromOnline();
+        }
+        else {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Collections.shuffle(quotes, new Random(SystemClock.currentThreadTimeMillis()));
 
-        loadingLayout.setVisibility(View.GONE);
+                    MainFragment.this.quotes.addAll(quotes);
+                    adapter.setItems(MainFragment.this.quotes);
+                    adapter.notifyDataSetChanged();
 
-        this.quotes.addAll(quotes);
-        adapter.setItems(this.quotes);
-        adapter.notifyDataSetChanged();
+                    loadingLayout.setVisibility(View.GONE);
+
+
+                }
+            });
+        }
+
+
     }
 }

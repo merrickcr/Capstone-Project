@@ -35,4 +35,5 @@
     <string name="nothing_here">There\'s nothing here</string>
     <string name="time">Time:</string>
     <string name="delete">Delete</string>
+    <string name="loading_data">loading data</string>
 </resources>

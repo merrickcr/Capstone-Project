@@ -91,7 +91,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
                 break;
         }
 
-        if(schedule.getDays().contains(day) == false){
+        if(schedule.getDays() == null || schedule.getDays().isEmpty() || schedule.getDays().contains(day) == false){
             return;
         }
 
@@ -107,7 +107,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.drawable.ic_chat_white_24dp)
                 .setContentText(quote.getText() != null ? quote.getText() : "inspirational quote")
                 .setStyle(new NotificationCompat.BigTextStyle()
-                    .bigText(quote.getText()));
+                    .bigText(quote.getText() != null ? quote.getText() : "inspirational quote"));
         mBuilder.setContentIntent(contentIntent);
         mBuilder.setDefaults(Notification.DEFAULT_SOUND);
         mBuilder.setAutoCancel(true);

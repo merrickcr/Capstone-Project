@@ -49,40 +49,4 @@ public class NotificationScheduler {
 
     }
 
-    public ScheduleObject getNextSchedule() {
-
-        ArrayList<ScheduleObject> schedules = QuoteDBHelper.get(context).getSchedules();
-
-        Date startTime = null;
-        Date endTime;
-
-        ScheduleObject returnSchedule = null;
-
-        Date now = new Date();
-        long diff = 0;
-        long currentDif = Long.MAX_VALUE;
-
-        for (ScheduleObject schedule : schedules) {
-            if (schedule.startTime != null) {
-                diff = schedule.startTime.getTime() - now.getTime();
-            }
-            if (startTime == null || diff < currentDif && diff > 0) {
-                startTime = schedule.getStartTime();
-                returnSchedule = schedule;
-                currentDif = diff;
-            }
-
-        }
-        return returnSchedule;
-    }
-
-    public int compareTimes(Date d1, Date d2) {
-        int t1;
-        int t2;
-
-        t1 = (int) (d1.getTime() % (24 * 60 * 60 * 1000L));
-        t2 = (int) (d2.getTime() % (24 * 60 * 60 * 1000L));
-        return (t1 - t2);
-    }
-
 }

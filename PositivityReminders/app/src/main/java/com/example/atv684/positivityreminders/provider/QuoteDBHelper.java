@@ -21,6 +21,7 @@ import android.util.Log;
 
 import com.example.atv684.positivityreminders.BaseActivity;
 import com.example.atv684.positivityreminders.ImageUtil;
+import com.example.atv684.positivityreminders.QuoteAdapter;
 import com.example.atv684.positivityreminders.QuoteObject;
 import com.example.atv684.positivityreminders.Schedules.ScheduleObject;
 import com.squareup.picasso.Picasso;
@@ -29,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.Exchanger;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -66,11 +68,6 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     private static volatile QuoteDBHelper instance;
 
-    @NonNull
-    public static QuoteDBHelper get(@NonNull DBHelperCallbackListener listener) {
-        instance.listener = listener;
-        return instance;
-    }
 
     @NonNull
     public static QuoteDBHelper get(@NonNull Context context) {
@@ -81,6 +78,14 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         } else {
             instance.context = context;
         }
+        return instance;
+    }
+
+    @NonNull
+    public static QuoteDBHelper get(@NonNull Context context, @NonNull DBHelperCallbackListener listener) {
+        instance = get(context);
+        instance.setListener(listener);
+
         return instance;
     }
 
@@ -143,42 +148,43 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
     }
 
 
-    public long addImage(Bitmap bitmap){
+    public long addImage(Bitmap bitmap) {
 
-        Bitmap scaled = ImageUtil.decodeSampledBitmapFromResource(ImageUtil.getBitmapAsByteArray(bitmap), bitmap.getHeight(), bitmap.getWidth
-            ());
+        Bitmap
+            scaled =
+            ImageUtil.decodeSampledBitmapFromResource(ImageUtil.getBitmapAsByteArray(bitmap), bitmap.getHeight(), bitmap.getWidth
+                ());
 
         db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(IMAGE_KEY_NAME, "image"+new Random(SystemClock.currentThreadTimeMillis()).nextInt(100000));
+        values.put(IMAGE_KEY_NAME, "image" + new Random(SystemClock.currentThreadTimeMillis()).nextInt(100000));
         values.put(IMAGE_KEY_IMAGE, ImageUtil.getBitmapAsByteArray(scaled));
 
         return db.insert(TABLE_NAME, null, values);
     }
 
-    public byte[] getImage(){
+    public byte[] getImage() {
 
         db = getWritableDatabase();
 
         Cursor c = db.query(TABLE_NAME, null, null, null, null, null, null);
 
-        if(!c.move(new Random().nextInt(c.getCount()))){
+        if (c.getCount() <= 0 || !c.move(new Random().nextInt(c.getCount()))) {
             return null;
         }
 
         byte[] blob = c.getBlob(c.getColumnIndex(IMAGE_KEY_IMAGE));
 
-        c.close();
+        //c.close();
 
         return blob;
     }
 
-    public long addSchedule(ScheduleObject schedule){
+    public long addSchedule(ScheduleObject schedule) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
-
 
         values.put(QuotesContract.ScheduleEntry.COLUMN_DAYS, (schedule.getDaysJSONArray() != null) ? schedule.getDaysJSONArray()
             .toString() : "");
@@ -186,29 +192,29 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
         long result = db.insert(QuotesContract.ScheduleEntry.TABLE_NAME, null, values);
 
-        Log.e("result" , "result = " + result);
+        Log.e("result", "result = " + result);
 
         return result;
     }
 
-    public void deleteSchedule(ScheduleObject schedule){
+    public void deleteSchedule(ScheduleObject schedule) {
 
         db = getWritableDatabase();
 
-        int result = db.delete(QuotesContract.ScheduleEntry.TABLE_NAME, "_id = ?", new String[] { String.valueOf(schedule.getId()) });
+        int result = db.delete(QuotesContract.ScheduleEntry.TABLE_NAME, "_id = ?", new String[]{String.valueOf(schedule.getId())});
 
         Log.e("deleting", "deleted results = " + result);
 
     }
 
-    public ArrayList<ScheduleObject> getSchedules(){
+    public ArrayList<ScheduleObject> getSchedules() {
         db = getReadableDatabase();
 
         Cursor c = db.query(QuotesContract.ScheduleEntry.TABLE_NAME, null, null, null, null, null, null);
 
         ArrayList<ScheduleObject> schedules = new ArrayList<ScheduleObject>();
 
-        while(c.moveToNext()){
+        while (c.moveToNext()) {
             schedules.add(new ScheduleObject(c));
         }
 
@@ -216,7 +222,6 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
         return schedules;
     }
-
 
 
     public void addQuote(String text, String author, String imageUri) {
@@ -229,12 +234,28 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         values.put(QuotesContract.QuoteEntry.COLUMN_IMAGE, imageUri);
         values.put(QuotesContract.QuoteEntry.COLUMN_CUSTOM, 1);
 
-        db.insert(QuotesContract.QuoteEntry.TABLE_NAME, null, values);
+        try {
+            db.insert(QuotesContract.QuoteEntry.TABLE_NAME, null, values);
+        } catch (Exception e) {
+
+        }
     }
 
     public void addQuote(QuoteObject quote) {
 
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(QuotesContract.QuoteEntry.COLUMN_TEXT, quote.getText());
+
+        Cursor result = db.query(QuotesContract.QuoteEntry.TABLE_NAME, null, QuotesContract.QuoteEntry.COLUMN_TEXT + " = ?", new
+            String[]{quote.getText()}, null, null, null);
+
+        if (result.moveToFirst() == true) {
+            return;
+        }
+
+        db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(QuotesContract.QuoteEntry.COLUMN_AUTHOR, quote.getAuthor());
@@ -243,8 +264,9 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         try {
             db.insert(QuotesContract.QuoteEntry.TABLE_NAME, null, values);
         } catch (Exception e) {
-
+            Log.e("TAG", e.getMessage());
         }
+
     }
 
     public void deleteQuoteTable() {
@@ -319,59 +341,59 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     public void fetchQuotesFromOnline() {
 
+//        new Handler().post(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//
+//            }
+//        });
+
         OkHttpClient client = new OkHttpClient();
 
-        requestCount = 0;
-        for (int i = 0; i < REQUEST_COUNT_MAX; i++) {
-            try {
+        try {
 
-                Request request = new Request.Builder()
-                    .url("http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en")
-                    .build();
+            Request request = new Request.Builder()
+                .url("http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en")
+                .build();
 
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        //do nothing?
-                        Log.e("DB REQUEST", "FAILED");
-
-                        synchronized (requestQueue) {
-                            requestQueue.remove(call.request());
-                        }
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-
-                        final Call finalCall = call;
-                        final Response finalResponse = response;
-
-                        QuoteObject quote = new QuoteObject(finalResponse.body().string());
-
-                        //String urlImage = getImageForQuote();
-
-                        addQuote(quote);
-
-                        synchronized (requestQueue) {
-                            requestQueue.remove(finalCall.request());
-                        }
-
-                        if (requestQueue.isEmpty()) {
-
-                            if (listener != null && requestQueue.isEmpty()) {
-                                listener.onLoadOnlineQuotes();
-                            }
-                        }
-                    }
-                });
-
-                synchronized (requestQueue) {
-                    requestQueue.add(request);
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    //do nothing?
+                    Log.e("DB REQUEST", "FAILED");
                 }
-            } catch (Exception e) {
-                Log.e("DBHelper", e.getMessage());
-            }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+
+                    final Call finalCall = call;
+                    final Response finalResponse = response;
+
+                    QuoteObject quote = new QuoteObject(finalResponse.body().string());
+
+                    //String urlImage = getImageForQuote();
+
+                    addQuote(quote);
+
+                    if (requestCount >= REQUEST_COUNT_MAX) {
+
+                        if (listener != null) {
+                            listener.onLoadOnlineQuotes();
+                            requestCount = 0;
+                        }
+                    } else {
+                        requestCount++;
+                        fetchQuotesFromOnline();
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            Log.e("DBHelper", e.getMessage());
         }
+
+
     }
 
 
@@ -379,14 +401,22 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
         SQLiteDatabase db = getWritableDatabase();
 
-        return db.insert(QuotesContract.QuoteEntry.TABLE_NAME, null, values);
+        long result = db.insert(QuotesContract.QuoteEntry.TABLE_NAME, null, values);
+
+        //db.close();
+
+        return result;
     }
 
     public int deleteQuote(String selection, String[] selectionArgs) {
 
         db = getWritableDatabase();
 
-        return db.delete(QuotesContract.QuoteEntry.TABLE_NAME, selection, selectionArgs);
+        int result = db.delete(QuotesContract.QuoteEntry.TABLE_NAME, selection, selectionArgs);
+
+        db.close();
+
+        return result;
 
     }
 
@@ -408,7 +438,15 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     public void fetchQuotesFromDB() {
         if (context instanceof BaseActivity) {
-            ((BaseActivity) context).getLoaderManager().initLoader(0, null, this);
+
+            ((BaseActivity) context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((BaseActivity) context).getLoaderManager().restartLoader(0, null, QuoteDBHelper.this);
+                    ((BaseActivity) context).getLoaderManager().initLoader(0, null, QuoteDBHelper.this);
+                }
+            });
+
         }
     }
 
@@ -432,6 +470,8 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
+
+
         ArrayList<QuoteObject> list = new ArrayList<>();
 
         while (data.moveToNext()) {
@@ -439,6 +479,7 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         }
 
         listener.onDataFinished(list);
+
 
     }
 
@@ -468,11 +509,16 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
         Cursor c = db.query(QuotesContract.ScheduleEntry.TABLE_NAME, null, "_id = ?", new String[]{String.valueOf(id)}, null, null, null);
 
-        if(c.moveToFirst()){
+        if (c.moveToFirst()) {
             return new ScheduleObject(c);
         }
         return null;
     }
+
+    public void setListener(DBHelperCallbackListener listener) {
+        this.listener = listener;
+    }
+
 
     public interface DBHelperCallbackListener {
 

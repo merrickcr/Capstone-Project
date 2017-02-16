@@ -43,7 +43,7 @@ public class QuoteWidgetProvider extends AppWidgetProvider implements QuoteDBHel
 
         appWidgetIds = ids;
 
-        QuoteDBHelper dbHelper = QuoteDBHelper.get(this);
+        QuoteDBHelper dbHelper = QuoteDBHelper.get(context, this);
 
         Cursor c = dbHelper.fetchQuotesCursor(null, null, null, null);
 

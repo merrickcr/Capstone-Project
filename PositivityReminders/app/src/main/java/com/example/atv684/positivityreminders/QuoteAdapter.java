@@ -22,13 +22,15 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> {
+public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> implements QuoteDBHelper.DBHelperCallbackListener {
 
     ArrayList<QuoteObject> arrayList;
 
     BaseActivity context;
 
     Bitmap image;
+
+    private QuoteDBHelper dbHelper;
 
     public QuoteAdapter(Context context, ArrayList<QuoteObject> arrayList) {
         this.arrayList = arrayList;
@@ -47,7 +49,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    private void loadImageFromDatabase(final ViewHolder holder) {
+    private void loadImageFromDatabase(final ViewHolder holder, final QuoteObject object) {
 
         GetImageFromDBAsyncTask task = new GetImageFromDBAsyncTask(context) {
             @Override
@@ -55,6 +57,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
                 super.onPostExecute(bitmap);
 
                 holder.image.setImageBitmap(bitmap);
+                object.setImage(bitmap);
             }
         };
 
@@ -67,7 +70,10 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
     public void onViewDetachedFromWindow(ViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         holder.image.setImageDrawable(null);
-        holder.task.cancel(true);
+
+        if(holder.task != null) {
+            holder.task.cancel(true);
+        }
 
     }
 
@@ -81,7 +87,8 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
         setupFabColor(arrayList.get(position), holder.favoriteFab);
 
-        final QuoteDBHelper dbHelper = QuoteDBHelper.get(context);
+        dbHelper = QuoteDBHelper.get(context);
+        dbHelper.setListener(this);
 
         holder.favoriteFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +134,14 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
             }
         });
 
-        loadImageFromDatabase(holder);
+        if(object.getImage() == null) {
+            loadImageFromDatabase(holder, object);
+        }
+
+        if(position >= getItemCount() - 1){
+            dbHelper.fetchImagesFromOnline();
+            dbHelper.fetchQuotesFromOnline();
+        }
 
 
     }
@@ -148,6 +162,17 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
     public void setItems(ArrayList items) {
         this.arrayList = items;
+    }
+
+    @Override
+    public void onLoadOnlineQuotes() {
+        dbHelper.fetchQuotesFromDB();
+    }
+
+    @Override
+    public void onDataFinished(ArrayList<QuoteObject> quotes) {
+        setItems(quotes);
+        notifyDataSetChanged();
     }
 
 

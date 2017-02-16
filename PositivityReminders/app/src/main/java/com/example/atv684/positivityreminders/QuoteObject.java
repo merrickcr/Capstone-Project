@@ -1,6 +1,7 @@
 package com.example.atv684.positivityreminders;
 
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
@@ -22,6 +23,8 @@ public class QuoteObject {
 
     private int numViews;
 
+    private Bitmap image;
+
     private boolean isFavorite = false;
 
     private boolean isCustom = false;
@@ -39,6 +42,7 @@ public class QuoteObject {
         isCustom = (c.getInt(c.getColumnIndex(QuotesContract.QuoteEntry.COLUMN_CUSTOM)) > 0) ? true : false;
         isFavorite = (c.getInt(c.getColumnIndex(QuotesContract.QuoteEntry.COLUMN_FAVORITE)) > 0) ? true : false;
         id = c.getInt(c.getColumnIndex(QuotesContract.QuoteEntry._ID));
+
     }
 
     public QuoteObject(String jsonString){
@@ -120,5 +124,13 @@ public class QuoteObject {
 
     public void incrementViews() {
         numViews += 1;
+    }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 }
