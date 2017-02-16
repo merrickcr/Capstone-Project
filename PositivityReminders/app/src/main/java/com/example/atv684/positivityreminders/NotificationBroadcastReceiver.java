@@ -9,16 +9,11 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.example.atv684.positivityreminders.Schedules.NotificationScheduler;
-import com.example.atv684.positivityreminders.Schedules.ScheduleObject;
-import com.example.atv684.positivityreminders.Schedules.ScheduleUtil;
+import com.example.atv684.positivityreminders.schedules.NotificationScheduler;
+import com.example.atv684.positivityreminders.schedules.ScheduleObject;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 import com.example.atv684.positivityreminders.provider.QuotesContract;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

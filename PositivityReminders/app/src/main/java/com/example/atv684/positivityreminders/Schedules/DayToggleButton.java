@@ -1,8 +1,7 @@
-package com.example.atv684.positivityreminders.Schedules;
+package com.example.atv684.positivityreminders.schedules;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;

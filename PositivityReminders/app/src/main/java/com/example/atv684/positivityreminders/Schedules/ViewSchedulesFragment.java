@@ -1,13 +1,11 @@
-package com.example.atv684.positivityreminders.Schedules;
+package com.example.atv684.positivityreminders.schedules;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ServiceCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +15,6 @@ import com.example.atv684.positivityreminders.R;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class ViewSchedulesFragment extends Fragment {
 

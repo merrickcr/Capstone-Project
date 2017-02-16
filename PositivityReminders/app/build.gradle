@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'positive_keys'
             keyPassword 'abcd12345'
-            storeFile file('/Users/atv684/Capstone_project/PositivityReminders/key_store.jks')
+            storeFile file('key_store.jks')
             storePassword 'abcd12345'
         }
     }
@@ -46,8 +46,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.firebase:firebase-ads:10.0.0'
     compile 'com.google.firebase:firebase-core:10.0.0'
-    compile 'com.google.firebase:firebase-storage:10.0.0'
-    compile 'com.google.firebase:firebase-auth:10.0.0'
     testCompile 'junit:junit:4.12'
 }
 

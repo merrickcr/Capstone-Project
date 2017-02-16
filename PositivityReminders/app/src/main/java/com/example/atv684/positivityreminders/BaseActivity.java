@@ -5,7 +5,6 @@ import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import android.content.Intent;
-import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,14 +17,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.example.atv684.positivityreminders.Menu.MenuListAdapter;
-import com.example.atv684.positivityreminders.Menu.SideNavMenuItem;
-import com.example.atv684.positivityreminders.Schedules.AddScheduleActivity;
-import com.example.atv684.positivityreminders.Schedules.ViewScheduleActivity;
+import com.example.atv684.positivityreminders.menu.MenuListAdapter;
+import com.example.atv684.positivityreminders.menu.SideNavMenuItem;
+import com.example.atv684.positivityreminders.schedules.ViewScheduleActivity;
 
 import java.util.ArrayList;
-
-import static java.security.AccessController.getContext;
 
 public class BaseActivity extends AppCompatActivity {
 

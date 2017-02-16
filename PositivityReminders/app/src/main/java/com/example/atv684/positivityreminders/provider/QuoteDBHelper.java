@@ -10,27 +10,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.atv684.positivityreminders.BaseActivity;
 import com.example.atv684.positivityreminders.ImageUtil;
-import com.example.atv684.positivityreminders.QuoteAdapter;
 import com.example.atv684.positivityreminders.QuoteObject;
-import com.example.atv684.positivityreminders.Schedules.ScheduleObject;
+import com.example.atv684.positivityreminders.schedules.ScheduleObject;
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.Exchanger;
 
 import okhttp3.Call;
 import okhttp3.Callback;

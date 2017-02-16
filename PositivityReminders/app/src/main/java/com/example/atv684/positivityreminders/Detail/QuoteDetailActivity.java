@@ -1,14 +1,11 @@
-package com.example.atv684.positivityreminders.Detail;
+package com.example.atv684.positivityreminders.detail;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 
 import com.example.atv684.positivityreminders.BaseActivity;
-import com.example.atv684.positivityreminders.MainFragment;
 import com.example.atv684.positivityreminders.R;
 
 /**

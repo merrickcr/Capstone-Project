@@ -1,4 +1,4 @@
-package com.example.atv684.positivityreminders.Menu;
+package com.example.atv684.positivityreminders.menu;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;

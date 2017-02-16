@@ -23,13 +23,13 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".Schedules.AddScheduleActivity"
+        <activity android:name=".schedules.AddScheduleActivity"
                   android:label="@string/label_add_a_reminder"/>
 
         <activity android:name=".AddQuoteActivity"
                   android:label="@string/cd_add_quote"/>
 
-        <activity android:name=".Detail.QuoteDetailActivity"/>
+        <activity android:name=".detail.QuoteDetailActivity"/>
 
         <activity android:name=".MainActivity"
                   android:label="@string/app_name">
@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Schedules.ViewScheduleActivity"
+        <activity android:name=".schedules.ViewScheduleActivity"
                   android:label="@string/label_view_schedules"/>
 
         <provider android:authorities="positivereminders.provider.quotes" android:name=".provider.QuoteProvider"/>

@@ -1,12 +1,8 @@
-package com.example.atv684.positivityreminders.Detail;
+package com.example.atv684.positivityreminders.detail;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

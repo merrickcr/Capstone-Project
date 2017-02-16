@@ -1,9 +1,6 @@
-package com.example.atv684.positivityreminders.Schedules;
+package com.example.atv684.positivityreminders.schedules;
 
-import android.content.Context;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
-import android.support.v4.content.SharedPreferencesCompat;
 import android.util.Log;
 
 import com.example.atv684.positivityreminders.provider.QuotesContract;
@@ -13,10 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Random;
 
 /**
  * Created Chris on 9/30/16.

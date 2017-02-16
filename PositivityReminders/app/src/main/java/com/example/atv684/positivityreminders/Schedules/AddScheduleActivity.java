@@ -1,4 +1,4 @@
-package com.example.atv684.positivityreminders.Schedules;
+package com.example.atv684.positivityreminders.schedules;
 
 import android.content.Context;
 import android.os.Bundle;

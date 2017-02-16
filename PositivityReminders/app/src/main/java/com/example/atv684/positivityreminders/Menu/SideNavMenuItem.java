@@ -1,6 +1,5 @@
-package com.example.atv684.positivityreminders.Menu;
+package com.example.atv684.positivityreminders.menu;
 
-import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 
 public class SideNavMenuItem {

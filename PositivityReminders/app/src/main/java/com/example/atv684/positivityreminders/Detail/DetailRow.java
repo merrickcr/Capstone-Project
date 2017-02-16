@@ -1,4 +1,4 @@
-package com.example.atv684.positivityreminders.Detail;
+package com.example.atv684.positivityreminders.detail;
 
 import android.content.Context;
 import android.util.AttributeSet;

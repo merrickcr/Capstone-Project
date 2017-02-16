@@ -1,22 +1,13 @@
-package com.example.atv684.positivityreminders.Schedules;
+package com.example.atv684.positivityreminders.schedules;
 
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 
 import com.example.atv684.positivityreminders.NotificationBroadcastReceiver;
 import com.example.atv684.positivityreminders.R;
-import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class NotificationScheduler {
 

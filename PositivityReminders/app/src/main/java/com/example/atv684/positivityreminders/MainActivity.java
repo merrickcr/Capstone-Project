@@ -3,9 +3,8 @@ package com.example.atv684.positivityreminders;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.RelativeLayout;
 
-import com.example.atv684.positivityreminders.Detail.QuoteDetailFragment;
+import com.example.atv684.positivityreminders.detail.QuoteDetailFragment;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
 public class MainActivity extends BaseActivity {

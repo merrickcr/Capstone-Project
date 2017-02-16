@@ -1,20 +1,16 @@
-package com.example.atv684.positivityreminders.Schedules;
+package com.example.atv684.positivityreminders.schedules;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.atv684.positivityreminders.R;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class ScheduleListAdapter extends BaseAdapter {
 

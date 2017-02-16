@@ -36,4 +36,7 @@
     <string name="time">Time:</string>
     <string name="delete">Delete</string>
     <string name="loading_data">loading data</string>
+    <string name="time_colon">Time:</string>
+    <string name="cd_quote_image">Quote Image</string>
+    <string name="cd_icon_image">icon image</string>
 </resources>
