@@ -168,7 +168,6 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
         byte[] blob = c.getBlob(c.getColumnIndex(IMAGE_KEY_IMAGE));
 
-        //c.close();
 
         return blob;
     }
@@ -209,8 +208,6 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         while (c.moveToNext()) {
             schedules.add(new ScheduleObject(c));
         }
-
-        c.close();
 
         return schedules;
     }
@@ -395,7 +392,6 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
         long result = db.insert(QuotesContract.QuoteEntry.TABLE_NAME, null, values);
 
-        //db.close();
 
         return result;
     }
@@ -405,8 +401,6 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         db = getWritableDatabase();
 
         int result = db.delete(QuotesContract.QuoteEntry.TABLE_NAME, selection, selectionArgs);
-
-        db.close();
 
         return result;
 

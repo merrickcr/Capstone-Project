@@ -62,8 +62,6 @@ public class ScheduleObject {
             Log.e("qbhelper", e.getMessage());
         }
 
-        c.close();
-
     }
 
     public String toJson() {
