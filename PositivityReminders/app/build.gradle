@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'positive_keys'
             keyPassword 'abcd12345'
-            storeFile file('key_store.jks')
+            storeFile file('../key_store.jks')
             storePassword 'abcd12345'
         }
     }

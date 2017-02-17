@@ -13,7 +13,7 @@ public class ImageUtil {
 
     /**
      * Bitmap resize taken from Googl ceveloper docs
-     *
+     * <p>
      * https://developer.android.com/training/displaying-bitmaps/load-bitmap.html
      *
      * @param options
@@ -51,14 +51,13 @@ public class ImageUtil {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
 
-
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
 
-        if(bitmap == null){
+        if (bitmap == null) {
             return null;
         }
         return BitmapFactory.decodeByteArray(bitmap, 0, bitmap.length, options);
@@ -72,17 +71,17 @@ public class ImageUtil {
 
     /**
      * This method converts device specific pixels to density independent pixels.
-     *
+     * <p>
      * http://stackoverflow.com/questions/4605527/converting-pixels-to-dp
      *
-     * @param px A value in px (pixels) unit. Which we need to convert into db
+     * @param px      A value in px (pixels) unit. Which we need to convert into db
      * @param context Context to get resources and device specific display metrics
      * @return A float value to represent dp equivalent to px value
      */
-    public static float convertPixelsToDp(float px, Context context){
+    public static float convertPixelsToDp(float px, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        float dp = px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        float dp = px / ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return dp;
     }
 

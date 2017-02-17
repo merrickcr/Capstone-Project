@@ -10,11 +10,11 @@ import com.example.atv684.positivityreminders.R;
 
 public class DayToggleButton extends LinearLayout {
 
+    Context context;
+
     private String label;
 
     private OnDayToggledListener listener;
-
-    Context context;
 
     private ToggleButton toggleButton;
 
@@ -33,7 +33,6 @@ public class DayToggleButton extends LinearLayout {
     public DayToggleButton(Context context, OnDayToggledListener listener, String label) {
         super(context);
 
-
         this.label = label;
         this.listener = listener;
         this.label = label;
@@ -46,7 +45,7 @@ public class DayToggleButton extends LinearLayout {
         init(context);
     }
 
-    private void init(Context context){
+    private void init(Context context) {
         this.context = context;
 
         inflate(context, R.layout.toggle_button, this);
@@ -68,13 +67,6 @@ public class DayToggleButton extends LinearLayout {
 
     }
 
-
-    public interface OnDayToggledListener{
-
-        public void onDayToggled(boolean isChecked, String day);
-
-    }
-
     public String getLabel() {
         return label;
     }
@@ -91,7 +83,13 @@ public class DayToggleButton extends LinearLayout {
         this.listener = listener;
     }
 
-    public boolean isChecked(){
+    public boolean isChecked() {
         return toggleButton.isChecked();
+    }
+
+    public interface OnDayToggledListener {
+
+        public void onDayToggled(boolean isChecked, String day);
+
     }
 }

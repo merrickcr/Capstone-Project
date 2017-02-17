@@ -10,36 +10,36 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/page_padding">
-
-        <ImageView
+        <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/image"
-                android:contentDescription="@string/cd_quote_image"
-                android:paddingBottom="25dp"
-        />
+                android:layout_height="match_parent"
+                android:padding="@dimen/page_padding">
 
-        <TextView android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_gravity="center"
-                  android:id="@+id/text"
-                  style="@style/basic_text_style"
-                  android:paddingBottom="@dimen/default_row_space"
-        />
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/image"
+                    android:contentDescription="@string/cd_quote_image"
+                    android:paddingBottom="25dp"
+            />
 
-        <TextView android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:id="@+id/author"
-                  android:paddingLeft="10dp"
-                  style="@style/basic_text_style"
-                  android:paddingBottom="@dimen/default_row_space"
-                  android:layout_gravity="center"
-        />
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="center"
+                      android:id="@+id/text"
+                      style="@style/basic_text_style"
+                      android:paddingBottom="@dimen/default_row_space"
+            />
+
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/author"
+                      android:paddingLeft="10dp"
+                      style="@style/basic_text_style"
+                      android:paddingBottom="@dimen/default_row_space"
+                      android:layout_gravity="center"
+            />
         </LinearLayout>
 
 

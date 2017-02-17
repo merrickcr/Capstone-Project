@@ -27,15 +27,6 @@ public class DetailRow extends RelativeLayout {
         setValue(value);
     }
 
-    private void init(Context context) {
-
-        View view = inflate(context, R.layout.detail_row_layout, this);
-
-        valueName = (TextView) view.findViewById(R.id.value_name);
-        value = (TextView) view.findViewById(R.id.value);
-
-    }
-
     public DetailRow(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -48,11 +39,20 @@ public class DetailRow extends RelativeLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    private void init(Context context) {
+
+        View view = inflate(context, R.layout.detail_row_layout, this);
+
+        valueName = (TextView) view.findViewById(R.id.value_name);
+        value = (TextView) view.findViewById(R.id.value);
+
+    }
+
     public void setValueName(String valueName) {
         this.valueName.setText(valueName);
     }
 
-    public void setValue(String value){
+    public void setValue(String value) {
         this.value.setText(value);
     }
 }

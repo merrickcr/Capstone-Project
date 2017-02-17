@@ -29,7 +29,7 @@ public class MainActivity extends BaseActivity {
 
         transaction.add(R.id.content, mainFragment);
 
-        if(hasDualContent()){
+        if (hasDualContent()) {
 
             detailFragment = new QuoteDetailFragment();
             detailFragment.setArguments(this.getIntent().getExtras());

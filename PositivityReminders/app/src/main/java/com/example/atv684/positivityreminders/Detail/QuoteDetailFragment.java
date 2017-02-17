@@ -46,14 +46,13 @@ public class QuoteDetailFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        text = (TextView)view.findViewById(R.id.text);
+        text = (TextView) view.findViewById(R.id.text);
         author = (TextView) view.findViewById(R.id.author);
         image = (ImageView) view.findViewById(R.id.image);
-        listArea = (LinearLayout)view.findViewById(R.id.list_area);
-
+        listArea = (LinearLayout) view.findViewById(R.id.list_area);
 
         int id = 0;
-        if(getArguments() != null) {
+        if (getArguments() != null) {
             id = getArguments().getInt("id");
         }
 
@@ -70,7 +69,7 @@ public class QuoteDetailFragment extends Fragment {
         super.onResume();
     }
 
-    public void populateFields(QuoteObject quote){
+    public void populateFields(QuoteObject quote) {
         text.setText(quote.getText());
         author.setText(quote.getAuthor());
         Picasso.with(getActivity()).load("https://source.unsplash.com/category/nature/800x600").into(image);

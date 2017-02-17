@@ -34,7 +34,6 @@ public class NotificationScheduler {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ((int) scheduleObject.id), notificationIntent,
             PendingIntent.FLAG_UPDATE_CURRENT);
 
-
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC, scheduleObject.getStartTime().getTime(), AlarmManager.INTERVAL_DAY, pendingIntent);
 

@@ -45,13 +45,34 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     private static final Object LOCK_OBJECT = new Object();
 
+    private static final int REQUEST_COUNT_MAX = 20;
+
+    // Table Names
+    private static final String TABLE_NAME = "images";
+
+    // column names
+    private static final String IMAGE_KEY_NAME = "image_name";
+
+    private static final String IMAGE_KEY_IMAGE = "image_data";
+
+    // Table create statement
+    private static final String CREATE_IMAGE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" +
+        "_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+        IMAGE_KEY_NAME + " TEXT," +
+        IMAGE_KEY_IMAGE + " BLOB UNIQUE);";
+
+    private static final String CREATE_SCHEDULE_TABLE = "CREATE TABLE " + QuotesContract.ScheduleEntry.TABLE_NAME + "(" +
+        QuotesContract.ScheduleEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        QuotesContract.ScheduleEntry.COLUMN_TIME + " STRING," +
+        QuotesContract.ScheduleEntry.COLUMN_DAYS + " STRING);";
+
+    private static volatile QuoteDBHelper instance;
+
     private Context context;
 
     private int requestCount = 0;
 
     private int imageRequestCount = 0;
-
-    private static final int REQUEST_COUNT_MAX = 20;
 
     private SQLiteDatabase db;
 
@@ -59,8 +80,10 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     private ArrayList<Request> requestQueue = new ArrayList<Request>();
 
-    private static volatile QuoteDBHelper instance;
-
+    private QuoteDBHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
+    }
 
     @NonNull
     public static QuoteDBHelper get(@NonNull Context context) {
@@ -82,36 +105,12 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         return instance;
     }
 
-    private QuoteDBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
-    }
-
     @Override
     public void onCreate(SQLiteDatabase db) {
 
         this.db = db;
         setupQuoteDB(db);
     }
-
-    // Table Names
-    private static final String TABLE_NAME = "images";
-
-    // column names
-    private static final String IMAGE_KEY_NAME = "image_name";
-
-    private static final String IMAGE_KEY_IMAGE = "image_data";
-
-    // Table create statement
-    private static final String CREATE_IMAGE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" +
-        "_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-        IMAGE_KEY_NAME + " TEXT," +
-        IMAGE_KEY_IMAGE + " BLOB UNIQUE);";
-
-    private static final String CREATE_SCHEDULE_TABLE = "CREATE TABLE " + QuotesContract.ScheduleEntry.TABLE_NAME + "(" +
-        QuotesContract.ScheduleEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        QuotesContract.ScheduleEntry.COLUMN_TIME + " STRING," +
-        QuotesContract.ScheduleEntry.COLUMN_DAYS + " STRING);";
 
     private void setupQuoteDB(SQLiteDatabase db) {
         final String SQL_CREATE_QUOTE_TABLE = "CREATE TABLE " + QuotesContract.QuoteEntry.TABLE_NAME + " (" +
@@ -462,8 +461,6 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-
 
         ArrayList<QuoteObject> list = new ArrayList<>();
 

@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 import com.example.atv684.positivityreminders.provider.QuotesContract;
 
 import org.json.JSONException;
@@ -31,10 +30,11 @@ public class QuoteObject {
 
     private String imageURI = "";
 
-    public QuoteObject(Cursor c){
+    public QuoteObject(Cursor c) {
 
-
-        if(c.getCount() <= 0 ) return;
+        if (c.getCount() <= 0) {
+            return;
+        }
 
         text = c.getString(c.getColumnIndex(QuotesContract.QuoteEntry.COLUMN_TEXT));
         author = c.getString(c.getColumnIndex(QuotesContract.QuoteEntry.COLUMN_AUTHOR));
@@ -45,7 +45,7 @@ public class QuoteObject {
 
     }
 
-    public QuoteObject(String jsonString){
+    public QuoteObject(String jsonString) {
 
         try {
             JSONObject json = new JSONObject(jsonString);
@@ -53,15 +53,14 @@ public class QuoteObject {
             this.text = json.optString("quoteText");
             this.author = json.optString("quoteAuthor");
 
-        }
-        catch(JSONException e){
+        } catch (JSONException e) {
             Log.e("QUOTE", e.getMessage());
         }
 
 
     }
 
-    public QuoteObject(String text, String author){
+    public QuoteObject(String text, String author) {
         this.text = text;
         this.author = author;
     }
@@ -70,16 +69,16 @@ public class QuoteObject {
         return author;
     }
 
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public String getText() {
         return text;
     }
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
     }
 
     public int getId() {

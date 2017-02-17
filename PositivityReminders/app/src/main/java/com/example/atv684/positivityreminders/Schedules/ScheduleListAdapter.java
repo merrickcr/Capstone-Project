@@ -69,27 +69,15 @@ public class ScheduleListAdapter extends BaseAdapter {
             }
         });
 
-
         String daysString = "";
 
-        for(int i = 0; i < object.getDaysJSONArray().length(); i++) {
+        for (int i = 0; i < object.getDaysJSONArray().length(); i++) {
             daysString += object.getDaysJSONArray().optString(i) + " ";
         }
         holder.days.setText(daysString);
 
         return view;
     }
-
-
-    public class ViewHolder {
-
-        TextView startTime;
-
-        ImageButton deleteButton;
-
-        public TextView days;
-    }
-
 
     void deleteSchedule(ScheduleObject object) {
         arrayList.remove(object);
@@ -98,6 +86,15 @@ public class ScheduleListAdapter extends BaseAdapter {
 
         notifyDataSetChanged();
 
+    }
+
+    public class ViewHolder {
+
+        public TextView days;
+
+        TextView startTime;
+
+        ImageButton deleteButton;
     }
 
 }

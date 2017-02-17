@@ -13,7 +13,7 @@ import com.example.atv684.positivityreminders.R;
 /**
  * Created Chris on 10/7/16.
  */
-public class ViewScheduleActivity extends BaseActivity{
+public class ViewScheduleActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

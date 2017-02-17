@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
@@ -18,7 +17,9 @@ import java.util.ArrayList;
 public class AddQuoteFragment extends Fragment implements QuoteDBHelper.DBHelperCallbackListener {
 
     Button addQuoteButton;
+
     EditText text;
+
     EditText author;
 
     @Nullable
@@ -34,7 +35,6 @@ public class AddQuoteFragment extends Fragment implements QuoteDBHelper.DBHelper
         addQuoteButton = (Button) view.findViewById(R.id.add_quote_button);
         text = (EditText) view.findViewById(R.id.text);
         author = (EditText) view.findViewById(R.id.author);
-
 
         addQuoteButton.setOnClickListener(new View.OnClickListener() {
             @Override

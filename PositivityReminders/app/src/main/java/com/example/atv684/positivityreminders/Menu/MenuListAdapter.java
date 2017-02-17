@@ -45,20 +45,19 @@ public class MenuListAdapter extends BaseAdapter {
         Object currentObject = menuItems.get(position);
 
         View view = null;
-        if(convertView == null){
+        if (convertView == null) {
 
-            if(currentObject instanceof SideNavMenuItem) {
+            if (currentObject instanceof SideNavMenuItem) {
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_list_item, parent, false);
 
-
-                ((ImageView)view.findViewById(R.id.icon)).setImageDrawable(ContextCompat.getDrawable(context, ((SideNavMenuItem) currentObject).getIcon()));
-                ((TextView)view.findViewById(R.id.menu_text)).setText(((SideNavMenuItem) currentObject).getText());
+                ((ImageView) view.findViewById(R.id.icon))
+                    .setImageDrawable(ContextCompat.getDrawable(context, ((SideNavMenuItem) currentObject).getIcon()));
+                ((TextView) view.findViewById(R.id.menu_text)).setText(((SideNavMenuItem) currentObject).getText());
 
                 view.setContentDescription(((SideNavMenuItem) currentObject).getText() + context.getString(R.string.cd_button));
             }
 
-        }
-        else{
+        } else {
             view = convertView;
         }
         return view;

@@ -67,7 +67,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
         super.onViewDetachedFromWindow(holder);
         holder.image.setImageDrawable(null);
 
-        if(holder.task != null) {
+        if (holder.task != null) {
             holder.task.cancel(true);
         }
 
@@ -130,11 +130,11 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
             }
         });
 
-        if(object.getImage() == null) {
+        if (object.getImage() == null) {
             loadImageFromDatabase(holder, object);
         }
 
-        if(position >= getItemCount() - 1){
+        if (position >= getItemCount() - 1) {
             dbHelper.fetchImagesFromOnline();
             dbHelper.fetchQuotesFromOnline();
         }

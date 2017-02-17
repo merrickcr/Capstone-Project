@@ -5,11 +5,11 @@ import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
@@ -46,7 +46,7 @@ public class BaseActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        drawerList = (ListView)findViewById(R.id.left_drawer);
+        drawerList = (ListView) findViewById(R.id.left_drawer);
 
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -81,26 +81,24 @@ public class BaseActivity extends AppCompatActivity {
     private void handleMenuClick(int position) {
 
         Intent intent = null;
-        if(position == Constants.VIEW_SCHEDULE_LIST_INDEX){
-           intent = new Intent(this, ViewScheduleActivity.class);
+        if (position == Constants.VIEW_SCHEDULE_LIST_INDEX) {
+            intent = new Intent(this, ViewScheduleActivity.class);
 
-        }
-        else if(position == Constants.VIEW_FAVORITES_LIST_INDEX){
+        } else if (position == Constants.VIEW_FAVORITES_LIST_INDEX) {
             intent = new Intent(this, MainActivity.class);
             intent.putExtra(Constants.VIEW_FAVORITES_BUNDLE, true);
-        }
-        else if(position == Constants.VIEW_CUSTOM_LIST_INDEX){
+        } else if (position == Constants.VIEW_CUSTOM_LIST_INDEX) {
             intent = new Intent(this, MainActivity.class);
             intent.putExtra(Constants.VIEW_CUSTOM_BUNDLE, true);
-        }
-        else if(position == Constants.HOME_LIST_INDEX){
+        } else if (position == Constants.HOME_LIST_INDEX) {
             intent = new Intent(this, MainActivity.class);
-        }
-        else if(position == Constants.ADD_QUOTE_INDEX){
+        } else if (position == Constants.ADD_QUOTE_INDEX) {
             intent = new Intent(this, AddQuoteActivity.class);
         }
 
-        if(intent == null) return;
+        if (intent == null) {
+            return;
+        }
 
         drawerLayout.closeDrawer(Gravity.LEFT);
         startActivity(intent);
@@ -121,12 +119,12 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-    public FirebaseAnalytics getAnalytics(){
+    public FirebaseAnalytics getAnalytics() {
         return mFirebaseAnalytics;
     }
 
-    public boolean hasDualContent(){
-        RelativeLayout dual_content = (RelativeLayout)findViewById(R.id.dual_content);
+    public boolean hasDualContent() {
+        RelativeLayout dual_content = (RelativeLayout) findViewById(R.id.dual_content);
 
         return dual_content != null;
     }

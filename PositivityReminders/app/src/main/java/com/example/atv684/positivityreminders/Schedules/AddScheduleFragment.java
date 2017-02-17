@@ -25,7 +25,7 @@ import java.util.Date;
 /**
  * Created Chris on 10/1/16.
  */
-public class AddScheduleFragment extends Fragment implements DayToggleButton.OnDayToggledListener{
+public class AddScheduleFragment extends Fragment implements DayToggleButton.OnDayToggledListener {
 
     private Button startTimeButton;
 
@@ -65,7 +65,7 @@ public class AddScheduleFragment extends Fragment implements DayToggleButton.OnD
                         startTime.setHours(selectedHour);
                         startTime.setMinutes(selectedMinute);
 
-                        startTimeButton.setText(getResources().getString(R.string.start_time_colon) +  selectedHour + ":" + selectedMinute);
+                        startTimeButton.setText(getResources().getString(R.string.start_time_colon) + selectedHour + ":" + selectedMinute);
                     }
                 }, hour, minute, false);//Yes 24 hour time
                 mTimePicker.setTitle(getResources().getString(R.string.select_start_time));
@@ -84,7 +84,6 @@ public class AddScheduleFragment extends Fragment implements DayToggleButton.OnD
         daysLayout.addView(new DayToggleButton(getContext(), this, getString(R.string.saturday_label)));
         daysLayout.addView(new DayToggleButton(getContext(), this, getString(R.string.sunday_label)));
 
-
         addScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,17 +92,17 @@ public class AddScheduleFragment extends Fragment implements DayToggleButton.OnD
         });
     }
 
-    public JSONArray parseDays(){
+    public JSONArray parseDays() {
 
         JSONArray daysJson = new JSONArray();
 
-        for(int i = 0; i < daysLayout.getChildCount(); i++){
+        for (int i = 0; i < daysLayout.getChildCount(); i++) {
 
             View view = daysLayout.getChildAt(i);
 
-            if(view instanceof DayToggleButton){
+            if (view instanceof DayToggleButton) {
                 DayToggleButton toggle = (DayToggleButton) view;
-                if(toggle.isChecked()) {
+                if (toggle.isChecked()) {
                     daysJson.put(((DayToggleButton) view).getLabel());
                 }
             }
@@ -113,17 +112,17 @@ public class AddScheduleFragment extends Fragment implements DayToggleButton.OnD
 
     }
 
-    private void addNewSchedule(){
+    private void addNewSchedule() {
 
         ScheduleObject schedule = new ScheduleObject();
         schedule.setStartTime(startTime);
         schedule.setDays(parseDays());
 
-        if(schedule.getStartTime() == null || schedule.getDaysJSONArray() == null){
+        if (schedule.getStartTime() == null || schedule.getDaysJSONArray() == null) {
             Snackbar.make(getView(), R.string.must_specify_time, Toast.LENGTH_LONG).show();
             return;
         }
-        if(schedule.getDaysJSONArray().length() <= 0){
+        if (schedule.getDaysJSONArray().length() <= 0) {
             Snackbar.make(getView(), R.string.must_be_day_of_week, Snackbar.LENGTH_LONG).show();
             return;
         }
@@ -134,7 +133,6 @@ public class AddScheduleFragment extends Fragment implements DayToggleButton.OnD
 
         NotificationScheduler scheduler = new NotificationScheduler(getContext());
         scheduler.scheduleNotification(schedule);
-
 
         getActivity().finish();
         getActivity().setResult(Activity.RESULT_OK);

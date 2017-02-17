@@ -4,15 +4,15 @@ import android.support.annotation.DrawableRes;
 
 public class SideNavMenuItem {
 
-    public SideNavMenuItem(int icon, String text) {
-        this.icon = icon;
-        this.text = text;
-    }
-
     @DrawableRes
     int icon;
 
     String text;
+
+    public SideNavMenuItem(int icon, String text) {
+        this.icon = icon;
+        this.text = text;
+    }
 
     public int getIcon() {
         return icon;

@@ -23,7 +23,7 @@ public class ScheduleObject {
 
     long id;
 
-    public ScheduleObject(){
+    public ScheduleObject() {
 
     }
 
@@ -36,7 +36,7 @@ public class ScheduleObject {
 
             JSONArray daysArray = jsonObject.getJSONArray("days");
 
-            for(int i = 0; i < daysArray.length(); i++){
+            for (int i = 0; i < daysArray.length(); i++) {
                 addDay(daysArray.getString(i));
             }
 
@@ -48,7 +48,7 @@ public class ScheduleObject {
 
     public ScheduleObject(Cursor c) {
 
-        if(c.getCount() <= 0){
+        if (c.getCount() <= 0) {
             return;
         }
 
@@ -58,7 +58,7 @@ public class ScheduleObject {
 
         try {
             setDays(new JSONArray(c.getString(c.getColumnIndex(QuotesContract.ScheduleEntry.COLUMN_DAYS))));
-        }catch(JSONException e){
+        } catch (JSONException e) {
             Log.e("qbhelper", e.getMessage());
         }
 
@@ -77,7 +77,7 @@ public class ScheduleObject {
 
                 JSONArray daysArray = new JSONArray();
 
-                for(String s : days){
+                for (String s : days) {
                     daysArray.put(s);
                 }
 
@@ -102,10 +102,10 @@ public class ScheduleObject {
 
     public void addDay(String day) {
 
-        if(days == null){
+        if (days == null) {
             days = new ArrayList<String>();
         }
-        if(!days.contains(day)){
+        if (!days.contains(day)) {
             days.add(day);
         }
     }
@@ -114,32 +114,32 @@ public class ScheduleObject {
         days.remove(day);
     }
 
-    public JSONArray getDaysJSONArray(){
+    public JSONArray getDaysJSONArray() {
         JSONArray daysArray = new JSONArray();
 
-        for(String s : days){
+        for (String s : days) {
             daysArray.put(s);
         }
 
         return daysArray;
     }
 
-    public void setDays(JSONArray array){
+    public void setDays(JSONArray array) {
 
         days = new ArrayList<String>();
 
-        for(int i= 0;i < array.length(); i++){
+        for (int i = 0; i < array.length(); i++) {
             days.add(array.optString(i));
         }
 
     }
 
-    public void setDays(ArrayList<String> days){
-        this.days = days;
-    }
-
     public ArrayList<String> getDays() {
         return days;
+    }
+
+    public void setDays(ArrayList<String> days) {
+        this.days = days;
     }
 
     public long getId() {

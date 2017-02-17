@@ -8,20 +8,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.example.atv684.positivityreminders.GetImageFromDBAsyncTask;
 import com.example.atv684.positivityreminders.QuoteObject;
 import com.example.atv684.positivityreminders.R;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -36,6 +31,23 @@ public class QuoteWidgetProvider extends AppWidgetProvider implements QuoteDBHel
     private QuoteObject quote;
 
     private ArrayList<QuoteObject> quotes;
+
+    /**
+     * http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
+     * as seen on stack overflow
+     *
+     * @param colorIntValue
+     * @return
+     */
+    // Put this method in whichever class you deem appropriate
+    // static or non-static, up to you.
+    public static int getContrastColor(int colorIntValue) {
+        int red = Color.red(colorIntValue);
+        int green = Color.green(colorIntValue);
+        int blue = Color.blue(colorIntValue);
+        double lum = (((0.299 * red) + ((0.587 * green) + (0.114 * blue))));
+        return lum > 186 ? 0xFF000000 : 0xFFFFFFFF;
+    }
 
     @Override
     public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, int[] ids) {
@@ -62,8 +74,6 @@ public class QuoteWidgetProvider extends AppWidgetProvider implements QuoteDBHel
                 super.onPostExecute(bitmap);
 
                 Palette palette = Palette.from(bitmap).generate();
-
-
 
                 final Context finalContext = context;
                 final AppWidgetManager manager = appWidgetManager;
@@ -109,22 +119,6 @@ public class QuoteWidgetProvider extends AppWidgetProvider implements QuoteDBHel
     @Override
     public void onDataFinished(ArrayList<QuoteObject> quotes) {
 
-    }
-
-    /**
-     * http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
-     * as seen on stack overflow
-     * @param colorIntValue
-     * @return
-     */
-    // Put this method in whichever class you deem appropriate
-    // static or non-static, up to you.
-    public static int getContrastColor(int colorIntValue) {
-        int red = Color.red(colorIntValue);
-        int green = Color.green(colorIntValue);
-        int blue = Color.blue(colorIntValue);
-        double lum = (((0.299 * red) + ((0.587 * green) + (0.114 * blue))));
-        return lum > 186 ? 0xFF000000 : 0xFFFFFFFF;
     }
 
 }

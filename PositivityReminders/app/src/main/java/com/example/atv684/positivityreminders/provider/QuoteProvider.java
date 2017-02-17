@@ -6,7 +6,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
@@ -31,15 +30,14 @@ public class QuoteProvider extends ContentProvider implements QuoteDBHelper.DBHe
 
     private static final int SAVED_QUOTES = 3;
 
+    private QuoteDBHelper dbHelper = null;
+
     private static UriMatcher getUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(PROVIDER_NAME, "quotes", QUOTES);
         uriMatcher.addURI(PROVIDER_NAME, "quotes/#", QUOTE_ID);
         return uriMatcher;
     }
-
-
-    private QuoteDBHelper dbHelper = null;
 
     @Override
     public boolean onCreate() {

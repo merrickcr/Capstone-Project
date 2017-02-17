@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -15,9 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnScrollChangeListener;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,19 +26,19 @@ import java.util.Random;
 
 public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelperCallbackListener {
 
+    static final String INTIAL_SETUP_PREFERENCE = "has_run_initial_setup";
+
     private static final int ADD_QUOTE_REQUEST_CODE = 1;
 
-    private RecyclerView recyclerView;
-
 //    FloatingActionButton fab;
+
+    QuoteDBHelper dbHelper;
+
+    private RecyclerView recyclerView;
 
     private QuoteAdapter adapter;
 
     private ArrayList<QuoteObject> quotes = new ArrayList<QuoteObject>();
-
-    static final String INTIAL_SETUP_PREFERENCE = "has_run_initial_setup";
-
-    QuoteDBHelper dbHelper;
 
     private RelativeLayout loadingLayout;
 
@@ -62,14 +59,13 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         loadingLayout = (RelativeLayout) view.findViewById(R.id.loading_layout);
-        loadingText = (TextView)view.findViewById(R.id.loading_text);
+        loadingText = (TextView) view.findViewById(R.id.loading_text);
 
         adapter = new QuoteAdapter(getActivity(), quotes);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-
 
 //        fab = (FloatingActionButton) view.findViewById(R.id.fab);
 //
@@ -112,12 +108,10 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
         }
 
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID,Constants.PAGE_VIEWED_ITEM_NAME);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Constants.PAGE_VIEWED_ITEM_NAME);
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, trackingTag);
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "string");
-        ((BaseActivity)getActivity()).getAnalytics().logEvent(Constants.PAGE_VIEWED_ITEM_NAME, bundle);
-
-
+        ((BaseActivity) getActivity()).getAnalytics().logEvent(Constants.PAGE_VIEWED_ITEM_NAME, bundle);
 
         //fetch quotes on initial setup
         if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
@@ -125,8 +119,7 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
             loadingText.setText(getString(R.string.loading_first_time_data));
             dbHelper.fetchQuotesFromOnline();
             dbHelper.fetchImagesFromOnline();
-        }
-        else{
+        } else {
             loadingText.setText(R.string.loading_data);
         }
 
@@ -154,11 +147,10 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
         //randomize
         Collections.shuffle(list, new Random(System.currentTimeMillis()));
 
-        if(quotes.isEmpty()){
+        if (quotes.isEmpty()) {
             loadingText.setText(R.string.nothing_here);
             loadingLayout.findViewById(R.id.progress_bar).setVisibility(View.GONE);
-        }
-        else{
+        } else {
             loadingLayout.setVisibility(View.GONE);
         }
 
@@ -184,8 +176,7 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
 
         if (adapter.getItemCount() <= 0) {
             dbHelper.fetchQuotesFromDB();
-        }
-        else{
+        } else {
             loadingLayout.setVisibility(View.GONE);
         }
 
@@ -195,10 +186,9 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
     @Override
     public void onDataFinished(final ArrayList<QuoteObject> quotes) {
 
-        if(quotes.size() < 20){
+        if (quotes.size() < 20) {
             dbHelper.fetchQuotesFromOnline();
-        }
-        else {
+        } else {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

@@ -18,11 +18,11 @@ import java.util.ArrayList;
 
 public class ViewSchedulesFragment extends Fragment {
 
+    public static final int ADD_SCHEDULE_REQUEST_CODE = 1;
+
     ListView listView;
 
     FloatingActionButton addScheduleFab;
-
-    public static final int ADD_SCHEDULE_REQUEST_CODE = 1;
 
     @Nullable
     @Override
@@ -60,7 +60,7 @@ public class ViewSchedulesFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == ADD_SCHEDULE_REQUEST_CODE){
+        if (requestCode == ADD_SCHEDULE_REQUEST_CODE) {
             Snackbar.make(getView(), getString(R.string.snackbar_quote_has_been_added), Snackbar.LENGTH_LONG).show();
         }
     }

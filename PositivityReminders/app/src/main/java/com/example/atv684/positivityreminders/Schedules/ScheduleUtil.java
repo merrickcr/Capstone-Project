@@ -19,7 +19,7 @@ public class ScheduleUtil {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent notificationIntent = new Intent(context, NotificationBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)object.id, notificationIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) object.id, notificationIntent, 0);
         alarmManager.cancel(pendingIntent);
 
         QuoteDBHelper.get(context).deleteSchedule(object);

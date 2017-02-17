@@ -1,6 +1,5 @@
 package com.example.atv684.positivityreminders.provider;
 
-import android.content.ContentResolver;
 import android.provider.BaseColumns;
 
 import java.util.ArrayList;
@@ -32,11 +31,17 @@ public class QuotesContract {
     public static final class ScheduleEntry implements BaseColumns {
 
         public static final String MONDAY = "M";
+
         public static final String TUESDAY = "T";
+
         public static final String WEDNESDAY = "W";
+
         public static final String THURSDAY = "Tr";
+
         public static final String FRIDAY = "F";
+
         public static final String SATURDAY = "Sa";
+
         public static final String SUNDAY = "Su";
 
         public static final ArrayList<String> FULL_WEEK = new ArrayList<>(Arrays.asList(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY,

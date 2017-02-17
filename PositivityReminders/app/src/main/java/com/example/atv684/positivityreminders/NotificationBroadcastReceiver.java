@@ -9,10 +9,10 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.example.atv684.positivityreminders.schedules.NotificationScheduler;
-import com.example.atv684.positivityreminders.schedules.ScheduleObject;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 import com.example.atv684.positivityreminders.provider.QuotesContract;
+import com.example.atv684.positivityreminders.schedules.NotificationScheduler;
+import com.example.atv684.positivityreminders.schedules.ScheduleObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,18 +28,16 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             //reboot alarm
             //get all the schedules
             ArrayList<ScheduleObject> schedules = QuoteDBHelper.get(context).getSchedules();
 
             NotificationScheduler scheduler = new NotificationScheduler(context);
-            for(ScheduleObject object : schedules){
+            for (ScheduleObject object : schedules) {
                 scheduler.scheduleNotification(object);
             }
-        }
-        else {
+        } else {
 
             long id = intent.getLongExtra("schedule", -1);
 
@@ -53,7 +51,6 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
 
         QuoteObject quote = dbHelper.readQuote();
 
-
         Date today = new Date();
 
         SimpleDateFormat formatter = new SimpleDateFormat("EEE");
@@ -62,7 +59,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
 
         String day = "";
 
-        switch (formatter.format(today)){
+        switch (formatter.format(today)) {
             case "Mon":
                 day = QuotesContract.ScheduleEntry.MONDAY;
                 break;
@@ -86,10 +83,9 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
                 break;
         }
 
-        if(schedule.getDays() == null || schedule.getDays().isEmpty() || schedule.getDays().contains(day) == false){
+        if (schedule.getDays() == null || schedule.getDays().isEmpty() || schedule.getDays().contains(day) == false) {
             return;
         }
-
 
         Log.i("notification", "visible");
 
