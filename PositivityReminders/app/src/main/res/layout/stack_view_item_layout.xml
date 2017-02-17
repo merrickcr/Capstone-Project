@@ -26,6 +26,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/cd_icon_image"
                     android:scaleType="fitXY"
                     android:id="@+id/image"/>
         </RelativeLayout>
@@ -37,7 +38,7 @@
                 android:layout_below="@+id/image_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="text"
+                android:text="@string/text"
                 android:id="@+id/text"
                 style="@style/basic_text_style"
                 android:paddingBottom="30dp"
@@ -49,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:text="text"
+                android:text="@string/text"
                 android:id="@+id/author"
                 android:layout_below="@+id/text"
                 android:gravity="bottom"
@@ -69,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:backgroundTint="@color/colorPrimaryDark"
-                    android:contentDescription="delete"
+                    android:contentDescription="@string/cd_delete"
                     android:id="@+id/delete_fab"
             />
 
@@ -80,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/favorite_fab"
                     app:backgroundTint="@color/colorPrimary"
-                    android:contentDescription="save"
+                    android:contentDescription="@string/cd_save"
                     android:layout_width="wrap_content"
             />
         </RelativeLayout>

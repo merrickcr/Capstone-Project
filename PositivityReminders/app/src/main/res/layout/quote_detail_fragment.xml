@@ -35,7 +35,7 @@
             <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:id="@+id/author"
-                      android:paddingLeft="10dp"
+                      android:paddingStart="10dp"
                       style="@style/basic_text_style"
                       android:paddingBottom="@dimen/default_row_space"
                       android:layout_gravity="center"

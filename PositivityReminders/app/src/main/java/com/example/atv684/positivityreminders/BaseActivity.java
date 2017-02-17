@@ -100,7 +100,7 @@ public class BaseActivity extends AppCompatActivity {
             return;
         }
 
-        drawerLayout.closeDrawer(Gravity.LEFT);
+        drawerLayout.closeDrawer(Gravity.START);
         startActivity(intent);
     }
 

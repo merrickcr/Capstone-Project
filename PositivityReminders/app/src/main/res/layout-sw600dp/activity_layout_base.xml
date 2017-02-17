@@ -45,11 +45,9 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                        android:layout_toRightOf="@id/content"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:layout_above="@+id/adView"
                         android:id="@+id/dual_content">
                 </RelativeLayout>
             </LinearLayout>

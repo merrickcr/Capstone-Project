@@ -39,4 +39,7 @@
     <string name="time_colon">Time:</string>
     <string name="cd_quote_image">Quote Image</string>
     <string name="cd_icon_image">icon image</string>
+    <string name="author">Author</string>
+    <string name="text">Text</string>
+    <string name="cd_save">save</string>
 </resources>
