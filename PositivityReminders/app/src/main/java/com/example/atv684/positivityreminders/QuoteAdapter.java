@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -130,6 +131,28 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
             }
         });
 
+        holder.shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                String textToSend = object.getText();
+
+                if(object.getAuthor() != null && !object.getAuthor().isEmpty()){
+                    textToSend += " -" + object.getAuthor();
+                }
+
+                textToSend += " (QuoteMe)";
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, textToSend);
+                sendIntent.setType("text/plain");
+
+                context.startActivity(Intent.createChooser(sendIntent, "Share a quote"));
+            }
+        });
+
         if (object.getImage() == null) {
             loadImageFromDatabase(holder, object);
         }
@@ -162,7 +185,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
     @Override
     public void onLoadOnlineQuotes() {
-        dbHelper.fetchQuotesFromDB();
+        //dbHelper.fetchQuotesFromDB();
     }
 
     @Override
@@ -184,6 +207,8 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
         TextView author;
 
+        ImageButton shareButton;
+
         View root;
 
         private GetImageFromDBAsyncTask task;
@@ -199,6 +224,8 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
             deleteFab = (FloatingActionButton) view.findViewById(R.id.delete_fab);
             favoriteFab = (FloatingActionButton) view.findViewById(R.id.favorite_fab);
+
+            shareButton = (ImageButton) view.findViewById(R.id.share_button);
         }
 
         public void setTask(GetImageFromDBAsyncTask task) {
