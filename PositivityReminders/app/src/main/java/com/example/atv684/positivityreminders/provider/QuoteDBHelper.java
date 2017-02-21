@@ -51,9 +51,9 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
     private static final String TABLE_NAME = "images";
 
     // column names
-    private static final String IMAGE_KEY_NAME = "image_name";
+    public static final String IMAGE_KEY_NAME = "image_name";
 
-    private static final String IMAGE_KEY_IMAGE = "image_data";
+    public static final String IMAGE_KEY_IMAGE = "image_data";
 
     // Table create statement
     private static final String CREATE_IMAGE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" +
@@ -156,7 +156,7 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         return db.insert(TABLE_NAME, null, values);
     }
 
-    public byte[] getImage() {
+    public ContentValues getImage() {
 
         db = getWritableDatabase();
 
@@ -169,7 +169,11 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         byte[] blob = c.getBlob(c.getColumnIndex(IMAGE_KEY_IMAGE));
 
 
-        return blob;
+        ContentValues cv = new ContentValues();
+        cv.put(IMAGE_KEY_IMAGE, blob);
+        cv.put(IMAGE_KEY_NAME, c.getString(c.getColumnIndex(IMAGE_KEY_NAME)));
+
+        return cv;
     }
 
     public long addSchedule(ScheduleObject schedule) {
@@ -321,6 +325,18 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 
         builder.setTables(QuotesContract.QuoteEntry.TABLE_NAME);
+
+        Cursor c = builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+
+        return c;
+    }
+
+    public Cursor fetchImageCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+
+        builder.setTables(TABLE_NAME);
 
         Cursor c = builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 
@@ -501,6 +517,13 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     public void setListener(DBHelperCallbackListener listener) {
         this.listener = listener;
+    }
+
+    public Cursor fetchImageByName() {
+
+
+        return null;
+
     }
 
 

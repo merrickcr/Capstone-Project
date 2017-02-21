@@ -3,10 +3,15 @@ package com.example.atv684.positivityreminders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +21,14 @@ import android.widget.TextView;
 
 import com.example.atv684.positivityreminders.detail.QuoteDetailActivity;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
+import com.example.atv684.positivityreminders.provider.QuoteProvider;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> implements QuoteDBHelper.DBHelperCallbackListener {
 
@@ -26,6 +37,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
     BaseActivity context;
 
     Bitmap image;
+
 
     private QuoteDBHelper dbHelper;
 
@@ -50,11 +62,26 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
         GetImageFromDBAsyncTask task = new GetImageFromDBAsyncTask(context) {
             @Override
-            protected void onPostExecute(Bitmap bitmap) {
-                super.onPostExecute(bitmap);
+            protected void onPostExecute(HashMap<String, Bitmap> values) {
+                super.onPostExecute(values);
+
+
+                Iterator<Map.Entry<String, Bitmap>> it = values.entrySet().iterator();
+
+                Map.Entry e = it.next();
+
+                String name = (String)e.getKey();
+                Bitmap bitmap = (Bitmap)e.getValue();
+
 
                 holder.image.setImageBitmap(bitmap);
                 object.setImage(bitmap);
+                object.setImageURI(name);
+
+                Cursor c = context.getContentResolver().query(Uri.parse(QuoteProvider.IMAGE_URI.toString() + "/" + object.getImageURI())
+                    , null, null, null, null);
+
+                Log.e("test", "test");
             }
         };
 
@@ -66,7 +93,6 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
     @Override
     public void onViewDetachedFromWindow(ViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        holder.image.setImageDrawable(null);
 
         if (holder.task != null) {
             holder.task.cancel(true);
@@ -86,6 +112,9 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
         dbHelper = QuoteDBHelper.get(context);
         dbHelper.setListener(this);
+
+        object.incrementViews();
+        dbHelper.updateQuote(object);
 
         holder.favoriteFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +148,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
                 Intent intent = new Intent(context, QuoteDetailActivity.class);
                 intent.putExtra("id", object.getId());
+                intent.putExtra("bitmap", object.getImage());
 
                 if (context.hasDualContent()) {
                     if (context instanceof MainActivity) {
@@ -142,12 +172,16 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
                     textToSend += " -" + object.getAuthor();
                 }
 
+
                 textToSend += " (QuoteMe)";
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, textToSend);
-                sendIntent.setType("text/plain");
+//                sendIntent.putExtra(Intent.EXTRA_STREAM, QuoteProvider.IMAGE_URI + "/" + object.getImageURI());
+                //sendIntent.putExtra(Intent.EXTRA_STREAM, object.getImage());
+                sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                //sendIntent.setType("image/*");
 
                 context.startActivity(Intent.createChooser(sendIntent, "Share a quote"));
             }
@@ -155,6 +189,9 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
         if (object.getImage() == null) {
             loadImageFromDatabase(holder, object);
+        }
+        else{
+            holder.image.setImageBitmap(object.getImage());
         }
 
         if (position >= getItemCount() - 1) {
@@ -185,7 +222,12 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
     @Override
     public void onLoadOnlineQuotes() {
-        //dbHelper.fetchQuotesFromDB();
+
+        if(this.getItemCount() <= 0) {
+            dbHelper.fetchQuotesFromDB();
+        }
+
+        //notifyDataSetChanged();
     }
 
     @Override
@@ -232,5 +274,8 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
             this.task = task;
         }
     }
+
+
+
 
 }

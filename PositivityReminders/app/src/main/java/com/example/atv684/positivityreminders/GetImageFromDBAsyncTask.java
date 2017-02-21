@@ -1,13 +1,16 @@
 package com.example.atv684.positivityreminders;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
+import java.util.HashMap;
 
-public class GetImageFromDBAsyncTask extends AsyncTask<Object, Integer, Bitmap> {
+
+public class GetImageFromDBAsyncTask extends AsyncTask<Object, Integer, HashMap<String, Bitmap>> {
 
 
     private final Context context;
@@ -17,19 +20,25 @@ public class GetImageFromDBAsyncTask extends AsyncTask<Object, Integer, Bitmap> 
     }
 
     @Override
-    protected Bitmap doInBackground(Object... object) {
-        Bitmap bitmap = ImageUtil.decodeSampledBitmapFromResource(QuoteDBHelper.get(context).getImage(), 800, 600);
+    protected HashMap<String, Bitmap> doInBackground(Object... object) {
+
+
+        ContentValues cv = QuoteDBHelper.get(context).getImage();
+        Bitmap bitmap = ImageUtil.decodeSampledBitmapFromResource(cv.getAsByteArray(QuoteDBHelper.IMAGE_KEY_IMAGE), 800, 600);
+
+        HashMap values = new HashMap<String,Bitmap>();
+        values.put(cv.getAsString(QuoteDBHelper.IMAGE_KEY_NAME), bitmap);
 
         if (bitmap != null) {
-            return bitmap;
+            return values;
         }
 
         return null;
     }
 
     @Override
-    protected void onPostExecute(Bitmap bitmap) {
-        super.onPostExecute(bitmap);
+    protected void onPostExecute(HashMap<String, Bitmap> values) {
+        super.onPostExecute(values);
     }
 
 

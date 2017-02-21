@@ -9,10 +9,12 @@ import com.example.atv684.positivityreminders.provider.QuotesContract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created Chris on 9/16/16.
  */
-public class QuoteObject {
+public class QuoteObject implements Serializable{
 
     private String text;
 

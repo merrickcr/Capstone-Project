@@ -18,7 +18,8 @@
 
             <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="200dp"
+                    android:scaleType="fitXY"
                     android:id="@+id/image"
                     android:contentDescription="@string/cd_quote_image"
                     android:paddingBottom="25dp"

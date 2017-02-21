@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
+import com.example.atv684.positivityreminders.provider.QuoteProvider;
+import com.example.atv684.positivityreminders.provider.QuotesContract;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -97,12 +100,12 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
                     trackingTag = Constants.CUSTOM_TAG;
                 }
             } else {
-                if (PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
-                    dbHelper.fetchQuotesFromDB();
-
+                if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
                     dbHelper.fetchQuotesFromOnline();
                     dbHelper.fetchImagesFromOnline();
                 }
+
+                dbHelper.fetchQuotesFromDB();
             }
 
         }
@@ -113,16 +116,15 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "string");
         ((BaseActivity) getActivity()).getAnalytics().logEvent(Constants.PAGE_VIEWED_ITEM_NAME, bundle);
 
-//        //fetch quotes on initial setup
-//        if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
-//
-//            loadingText.setText(getString(R.string.loading_first_time_data));
-//            dbHelper.fetchQuotesFromOnline();
-//            dbHelper.fetchImagesFromOnline();
-//        } else {
-//            loadingText.setText(R.string.loading_data);
-//        }
+        //fetch quotes on initial setup
+        if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
 
+            loadingText.setText(getString(R.string.loading_first_time_data));
+            dbHelper.fetchQuotesFromOnline();
+            dbHelper.fetchImagesFromOnline();
+        } else {
+            loadingText.setText(R.string.loading_data);
+        }
 
     }
 

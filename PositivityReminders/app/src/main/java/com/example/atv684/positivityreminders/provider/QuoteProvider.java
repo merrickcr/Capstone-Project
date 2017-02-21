@@ -6,11 +6,18 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
+import com.example.atv684.positivityreminders.ImageUtil;
 import com.example.atv684.positivityreminders.QuoteObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 /**
@@ -22,6 +29,8 @@ public class QuoteProvider extends ContentProvider implements QuoteDBHelper.DBHe
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + PROVIDER_NAME + "/quotes");
 
+    public static final Uri IMAGE_URI = Uri.parse("content://" + PROVIDER_NAME + "/images");
+
     public static final int QUOTES = 1;
 
     public static final int QUOTE_ID = 2;
@@ -30,12 +39,15 @@ public class QuoteProvider extends ContentProvider implements QuoteDBHelper.DBHe
 
     private static final int SAVED_QUOTES = 3;
 
+    private static final int IMAGE_ID = 4;
+
     private QuoteDBHelper dbHelper = null;
 
     private static UriMatcher getUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(PROVIDER_NAME, "quotes", QUOTES);
         uriMatcher.addURI(PROVIDER_NAME, "quotes/#", QUOTE_ID);
+        uriMatcher.addURI(PROVIDER_NAME, "images/*", IMAGE_ID);
         return uriMatcher;
     }
 
@@ -55,6 +67,9 @@ public class QuoteProvider extends ContentProvider implements QuoteDBHelper.DBHe
             case QUOTE_ID:
                 String[] args = new String[]{uri.getPathSegments().get(1)};
                 return dbHelper.fetchQuotesCursor(null, "_id = ?", args, null);
+            case IMAGE_ID:
+                args = new String[]{uri.getPathSegments().get(1)};
+                return dbHelper.fetchImageCursor(null, QuoteDBHelper.IMAGE_KEY_NAME + " = ?", args, null);
         }
 
         return null;
@@ -114,5 +129,39 @@ public class QuoteProvider extends ContentProvider implements QuoteDBHelper.DBHe
     @Override
     public void onDataFinished(ArrayList<QuoteObject> quotes) {
         //not needed
+    }
+
+    @Override
+    public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
+
+        Log.v("QA", "Called with uri: '" + uri + "'." + uri.getLastPathSegment());
+
+        // Check incoming Uri against the matcher
+        switch (getUriMatcher().match(uri)) {
+
+            // If it returns 1 - then it matches the Uri defined in onCreate
+            case IMAGE_ID:
+
+                // The desired file name is specified by the last segment of the
+                // path
+                // E.g.
+                // 'content://com.stephendnicholas.gmailattach.provider/Test.txt'
+                // Take this and build the path to the file
+                // String fileLocation = getContext().getCacheDir() + File.separator + uri.getLastPathSegment();
+
+//                String[] args = new String[]{uri.getPathSegments().get(1)};
+//                Cursor c = dbHelper.fetchImageCursor(null, QuoteDBHelper.IMAGE_KEY_NAME + " = ?", args, null);
+//
+//                Bitmap bitmap = ImageUtil.decodeSampledBitmapFromResource(c.getBlob(c.getColumnIndex(QuoteDBHelper.IMAGE_KEY_IMAGE)), 800, 600);
+
+                final ParcelFileDescriptor parcelFileDescriptor = getContext().getContentResolver().openFileDescriptor( uri, "r");
+
+                return parcelFileDescriptor;
+
+            // Otherwise unrecognised Uri
+            default:
+                Log.v("PROVIDER", "Unsupported uri: '" + uri + "'.");
+                throw new FileNotFoundException("Unsupported uri: " + uri.toString());
+        }
     }
 }

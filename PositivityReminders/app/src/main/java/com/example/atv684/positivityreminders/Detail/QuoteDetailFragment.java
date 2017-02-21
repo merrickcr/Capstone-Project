@@ -1,5 +1,6 @@
 package com.example.atv684.positivityreminders.detail;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -54,9 +55,15 @@ public class QuoteDetailFragment extends Fragment {
         int id = 0;
         if (getArguments() != null) {
             id = getArguments().getInt("id");
+            Bitmap bitmap = getArguments().getParcelable("bitmap");
+
+            if(bitmap != null){
+                image.setImageBitmap(bitmap);
+            }
         }
 
         dbHelper = QuoteDBHelper.get(getContext());
+
 
         quote = dbHelper.fetchQuoteById(id);
 
@@ -72,7 +79,7 @@ public class QuoteDetailFragment extends Fragment {
     public void populateFields(QuoteObject quote) {
         text.setText(quote.getText());
         author.setText(quote.getAuthor());
-        Picasso.with(getActivity()).load("https://source.unsplash.com/category/nature/800x600").into(image);
+        //image.setImageBitmap(quote.getImage());
 
         listArea.removeAllViews();
         listArea.addView(new DetailRow(getActivity(), "Number of Views:", String.valueOf(quote.getNumViews())));

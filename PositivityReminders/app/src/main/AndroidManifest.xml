@@ -43,7 +43,9 @@
         <activity android:name=".schedules.ViewScheduleActivity"
                   android:label="@string/label_view_schedules"/>
 
-        <provider android:authorities="positivereminders.provider.quotes" android:name=".provider.QuoteProvider"/>
+        <provider android:authorities="positivereminders.provider.quotes"
+                  android:name=".provider.QuoteProvider"
+                  android:exported="true"/>
 
         <receiver android:name=".widget.QuoteWidgetProvider">
             <intent-filter>

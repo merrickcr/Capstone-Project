@@ -18,6 +18,7 @@ import com.example.atv684.positivityreminders.R;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class QuoteWidgetProvider extends AppWidgetProvider implements QuoteDBHelper.DBHelperCallbackListener {
@@ -70,8 +71,10 @@ public class QuoteWidgetProvider extends AppWidgetProvider implements QuoteDBHel
 
         new GetImageFromDBAsyncTask(context) {
             @Override
-            protected void onPostExecute(Bitmap bitmap) {
-                super.onPostExecute(bitmap);
+            protected void onPostExecute(HashMap<String, Bitmap> values) {
+                super.onPostExecute(values);
+
+                Bitmap bitmap = values.get(values.keySet().iterator().next());
 
                 Palette palette = Palette.from(bitmap).generate();
 
