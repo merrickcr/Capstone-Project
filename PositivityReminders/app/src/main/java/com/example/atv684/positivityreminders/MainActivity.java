@@ -20,25 +20,27 @@ public class MainActivity extends BaseActivity {
         //setup SQLiteOpenHelper singleton instance
         QuoteDBHelper.get(this);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if(savedInstanceState == null){
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        mainFragment = new MainFragment();
+            mainFragment = new MainFragment();
 
-        mainFragment.setArguments(this.getIntent().getExtras());
+            mainFragment.setArguments(this.getIntent().getExtras());
 
-        transaction.add(R.id.content, mainFragment);
+            transaction.add(R.id.content, mainFragment);
 
-        if (hasDualContent()) {
+            if (hasDualContent()) {
 
-            detailFragment = new QuoteDetailFragment();
-            detailFragment.setArguments(this.getIntent().getExtras());
+                detailFragment = new QuoteDetailFragment();
+                detailFragment.setArguments(this.getIntent().getExtras());
 
-            transaction.add(R.id.dual_content, detailFragment);
+                transaction.add(R.id.dual_content, detailFragment);
 
+            }
+
+            transaction.commit();
         }
-
-        transaction.commit();
     }
 
     public MainFragment getMainFragment() {

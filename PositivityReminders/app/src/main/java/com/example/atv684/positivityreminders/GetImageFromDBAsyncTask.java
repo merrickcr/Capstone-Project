@@ -24,6 +24,11 @@ public class GetImageFromDBAsyncTask extends AsyncTask<Object, Integer, HashMap<
 
 
         ContentValues cv = QuoteDBHelper.get(context).getImage();
+
+        if(cv == null){
+            return null;
+        }
+
         Bitmap bitmap = ImageUtil.decodeSampledBitmapFromResource(cv.getAsByteArray(QuoteDBHelper.IMAGE_KEY_IMAGE), 800, 600);
 
         HashMap values = new HashMap<String,Bitmap>();

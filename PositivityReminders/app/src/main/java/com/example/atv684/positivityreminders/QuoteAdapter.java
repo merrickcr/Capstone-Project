@@ -32,6 +32,8 @@ import java.util.Map;
 
 public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> implements QuoteDBHelper.DBHelperCallbackListener {
 
+    boolean loadOnScroll;
+
     ArrayList<QuoteObject> arrayList;
 
     BaseActivity context;
@@ -41,8 +43,9 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
 
     private QuoteDBHelper dbHelper;
 
-    public QuoteAdapter(Context context, ArrayList<QuoteObject> arrayList) {
+    public QuoteAdapter(Context context, ArrayList<QuoteObject> arrayList, boolean loadOnScroll) {
         this.arrayList = arrayList;
+        this.loadOnScroll = loadOnScroll;
 
         if (context instanceof BaseActivity) {
             this.context = (BaseActivity) context;
@@ -81,7 +84,6 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
                 Cursor c = context.getContentResolver().query(Uri.parse(QuoteProvider.IMAGE_URI.toString() + "/" + object.getImageURI())
                     , null, null, null, null);
 
-                Log.e("test", "test");
             }
         };
 
@@ -178,9 +180,9 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, textToSend);
-//                sendIntent.putExtra(Intent.EXTRA_STREAM, QuoteProvider.IMAGE_URI + "/" + object.getImageURI());
+                //sendIntent.putExtra(Intent.EXTRA_STREAM, QuoteProvider.IMAGE_URI + "/" + object.getImageURI());
                 //sendIntent.putExtra(Intent.EXTRA_STREAM, object.getImage());
-                sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                //sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 //sendIntent.setType("image/*");
 
                 context.startActivity(Intent.createChooser(sendIntent, "Share a quote"));
@@ -194,7 +196,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
             holder.image.setImageBitmap(object.getImage());
         }
 
-        if (position >= getItemCount() - 1) {
+        if (loadOnScroll && position >= getItemCount() - 1) {
             dbHelper.fetchImagesFromOnline();
             dbHelper.fetchQuotesFromOnline();
         }

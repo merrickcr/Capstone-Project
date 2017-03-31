@@ -15,6 +15,8 @@ import com.example.atv684.positivityreminders.R;
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ViewSchedulesFragment extends Fragment {
 
@@ -36,6 +38,14 @@ public class ViewSchedulesFragment extends Fragment {
         ArrayList<ScheduleObject> schedules = new ArrayList<>();
 
         schedules = QuoteDBHelper.get(getContext()).getSchedules();
+
+        Collections.sort(schedules, new Comparator<ScheduleObject>(){
+            @Override
+            public int compare(ScheduleObject scheduleObject, ScheduleObject t1) {
+                return scheduleObject.getStartTime().compareTo(t1.getStartTime());
+            }
+        });
+
         listView.setAdapter(new ScheduleListAdapter(getContext(), schedules));
     }
 

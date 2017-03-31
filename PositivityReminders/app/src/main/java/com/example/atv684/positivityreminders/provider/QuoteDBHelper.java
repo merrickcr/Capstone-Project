@@ -168,7 +168,6 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
         byte[] blob = c.getBlob(c.getColumnIndex(IMAGE_KEY_IMAGE));
 
-
         ContentValues cv = new ContentValues();
         cv.put(IMAGE_KEY_IMAGE, blob);
         cv.put(IMAGE_KEY_NAME, c.getString(c.getColumnIndex(IMAGE_KEY_NAME)));
@@ -240,6 +239,10 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
         ContentValues cv = new ContentValues();
         cv.put(QuotesContract.QuoteEntry.COLUMN_TEXT, quote.getText());
+
+        if (quote.getText() == null) {
+            return;
+        }
 
         Cursor result = db.query(QuotesContract.QuoteEntry.TABLE_NAME, null, QuotesContract.QuoteEntry.COLUMN_TEXT + " = ?", new
             String[]{quote.getText()}, null, null, null);
@@ -408,7 +411,6 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
         long result = db.insert(QuotesContract.QuoteEntry.TABLE_NAME, null, values);
 
-
         return result;
     }
 
@@ -521,9 +523,12 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     public Cursor fetchImageByName() {
 
-
         return null;
 
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
 

@@ -3,6 +3,7 @@ package com.example.atv684.positivityreminders;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import android.app.Activity;
+import android.app.LoaderManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -12,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +20,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
-import com.example.atv684.positivityreminders.provider.QuoteProvider;
-import com.example.atv684.positivityreminders.provider.QuotesContract;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +45,8 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
 
     private TextView loadingText;
 
+    private boolean shouldRefreshView = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -54,21 +54,44 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        dbHelper = QuoteDBHelper.get(getContext(), this);
+        if(savedInstanceState == null) {
+
+            dbHelper = QuoteDBHelper.get(getContext(), this);
+
+            Bundle extras = getActivity().getIntent().getExtras();
+            if (extras != null &&
+                (extras.containsKey(Constants.VIEW_FAVORITES_BUNDLE) || extras.containsKey(Constants.VIEW_CUSTOM_BUNDLE))) {
+                adapter = new QuoteAdapter(getContext(), quotes, false);
+            } else {
+                adapter = new QuoteAdapter(getContext(), quotes, true);
+            }
+
+        }
+
+        if(dbHelper != null){
+            dbHelper.setContext(getContext());
+        }
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         loadingLayout = (RelativeLayout) view.findViewById(R.id.loading_layout);
         loadingText = (TextView) view.findViewById(R.id.loading_text);
 
-        adapter = new QuoteAdapter(getActivity(), quotes);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+
+
 
 //        fab = (FloatingActionButton) view.findViewById(R.id.fab);
 //
@@ -91,23 +114,27 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
 
             Bundle extras = getActivity().getIntent().getExtras();
 
-            if (extras != null) {
-                if (extras.containsKey(Constants.VIEW_FAVORITES_BUNDLE)) {
-                    fetchFavoriteQuotes();
-                    trackingTag = Constants.FAVORITE_TAG;
-                } else if (extras.containsKey(Constants.VIEW_CUSTOM_BUNDLE)) {
-                    fetchCustomQuotes();
-                    trackingTag = Constants.CUSTOM_TAG;
-                }
+            if (extras != null && extras.containsKey(Constants.VIEW_FAVORITES_BUNDLE)) {
+                fetchFavoriteQuotes();
+                trackingTag = Constants.FAVORITE_TAG;
+            } else if (extras != null && extras.containsKey(Constants.VIEW_CUSTOM_BUNDLE)) {
+                fetchCustomQuotes();
+                trackingTag = Constants.CUSTOM_TAG;
             } else {
                 if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
-                    dbHelper.fetchQuotesFromOnline();
-                    dbHelper.fetchImagesFromOnline();
+                    shouldRefreshView = true;
                 }
+
+                //dbHelper.fetchQuotesFromOnline();
+                //dbHelper.fetchImagesFromOnline();
 
                 dbHelper.fetchQuotesFromDB();
             }
-
+        }
+        else{
+            if(adapter.getItemCount() > 0){
+                loadingLayout.setVisibility(View.GONE);
+            }
         }
 
         Bundle bundle = new Bundle();
@@ -140,7 +167,7 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
     private void setCursorToQuoteList(Cursor c) {
         ArrayList list = new ArrayList();
 
-        while (c.moveToNext()) {
+        while(c.moveToNext()){
             list.add(new QuoteObject(c));
         }
 
@@ -156,7 +183,6 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
             loadingLayout.setVisibility(View.GONE);
         }
 
-        this.quotes.addAll(quotes);
         adapter.setItems(list);
         adapter.notifyDataSetChanged();
     }
@@ -181,6 +207,8 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
         } else {
             loadingLayout.setVisibility(View.GONE);
         }
+
+        shouldRefreshView = false;
 
 
     }

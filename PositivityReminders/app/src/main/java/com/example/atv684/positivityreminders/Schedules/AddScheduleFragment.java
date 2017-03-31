@@ -19,6 +19,7 @@ import com.example.atv684.positivityreminders.provider.QuoteDBHelper;
 
 import org.json.JSONArray;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -65,7 +66,7 @@ public class AddScheduleFragment extends Fragment implements DayToggleButton.OnD
                         startTime.setHours(selectedHour);
                         startTime.setMinutes(selectedMinute);
 
-                        startTimeButton.setText(getResources().getString(R.string.start_time_colon) + selectedHour + ":" + selectedMinute);
+                        startTimeButton.setText(getResources().getString(R.string.start_time_colon) + new SimpleDateFormat("hh:mm a").format(startTime));
                     }
                 }, hour, minute, false);//Yes 24 hour time
                 mTimePicker.setTitle(getResources().getString(R.string.select_start_time));
