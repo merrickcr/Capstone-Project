@@ -38,6 +38,7 @@ public class GetImageFromDBAsyncTask extends AsyncTask<Object, Integer, HashMap<
             return values;
         }
 
+        //TODO return default image?
         return null;
     }
 

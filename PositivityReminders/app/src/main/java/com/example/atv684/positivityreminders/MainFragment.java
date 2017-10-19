@@ -108,6 +108,16 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
     public void onResume() {
         super.onResume();
 
+        //fetch quotes on initial setup
+        if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
+            loadingText.setText(getString(R.string.loading_first_time_data));
+        } else if(adapter.getItemCount() <= 0){
+            loadingText.setText(R.string.loading_data);
+        }
+
+        dbHelper.fetchQuotesFromOnline();
+        dbHelper.fetchImagesFromOnline();
+
         String trackingTag = Constants.HOME_TAG;
 
         if (adapter.getItemCount() <= 0) {
@@ -143,15 +153,7 @@ public class MainFragment extends BaseFragment implements QuoteDBHelper.DBHelper
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "string");
         ((BaseActivity) getActivity()).getAnalytics().logEvent(Constants.PAGE_VIEWED_ITEM_NAME, bundle);
 
-        //fetch quotes on initial setup
-        if (!PreferenceManager.getDefaultSharedPreferences(getContext()).contains(INTIAL_SETUP_PREFERENCE)) {
 
-            loadingText.setText(getString(R.string.loading_first_time_data));
-            dbHelper.fetchQuotesFromOnline();
-            dbHelper.fetchImagesFromOnline();
-        } else {
-            loadingText.setText(R.string.loading_data);
-        }
 
     }
 

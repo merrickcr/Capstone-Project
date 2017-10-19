@@ -30,7 +30,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import static android.content.ContentValues.TAG;
+
 public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> implements QuoteDBHelper.DBHelperCallbackListener {
+
+    public static final String TAG = QuoteAdapter.class.getSimpleName();
 
     boolean loadOnScroll;
 
@@ -69,20 +73,24 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.ViewHolder> 
                 super.onPostExecute(values);
 
 
-                Iterator<Map.Entry<String, Bitmap>> it = values.entrySet().iterator();
+                if(values != null && values.entrySet() != null) {
+                    Iterator<Map.Entry<String, Bitmap>> it = values.entrySet().iterator();
 
-                Map.Entry e = it.next();
+                    Map.Entry e = it.next();
 
-                String name = (String)e.getKey();
-                Bitmap bitmap = (Bitmap)e.getValue();
+                    String name = (String) e.getKey();
+                    Bitmap bitmap = (Bitmap) e.getValue();
 
+                    holder.image.setImageBitmap(bitmap);
+                    object.setImage(bitmap);
+                    object.setImageURI(name);
 
-                holder.image.setImageBitmap(bitmap);
-                object.setImage(bitmap);
-                object.setImageURI(name);
-
-                Cursor c = context.getContentResolver().query(Uri.parse(QuoteProvider.IMAGE_URI.toString() + "/" + object.getImageURI())
-                    , null, null, null, null);
+                    Cursor c = context.getContentResolver().query(Uri.parse(QuoteProvider.IMAGE_URI.toString() + "/" + object.getImageURI())
+                        , null, null, null, null);
+                }
+                else{
+                    Log.e(TAG, "null entry set");
+                }
 
             }
         };

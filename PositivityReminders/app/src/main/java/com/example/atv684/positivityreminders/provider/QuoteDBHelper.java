@@ -509,6 +509,8 @@ public class QuoteDBHelper extends SQLiteOpenHelper implements LoaderManager.Loa
 
     public ScheduleObject getSchedule(long id) {
 
+        db = getReadableDatabase();
+
         Cursor c = db.query(QuotesContract.ScheduleEntry.TABLE_NAME, null, "_id = ?", new String[]{String.valueOf(id)}, null, null, null);
 
         if (c.moveToFirst()) {
